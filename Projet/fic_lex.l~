@@ -15,7 +15,7 @@ float {integer}\.{integer_pos}
 [ \n]*\/\*({Y}|\*\**{Z}|\*\**\"{X}*\"|\"{X}*\")*\*\**\/[ \n]* {printf("COMMENTS\n");}
 prog[ \n\t]* {printf("PROG "); return (PROG);}
 [ \n\t]*begin[ \n\t]* {printf(" BEGIN2 ");return (BEGIN2);}
-[ \n\t]*end[ \n\t]* {printf(" END \n");return(END);}
+[ \n\t]*end[ \n\t]* {printf(" END ");return(END);}
 [ \t\n]*empty[ ]* {printf(" EMPTY ");return (EMPTY);}
 [ ]*;[ \t\n]* {printf(" PVIRG ");return (PVIRG);}
 [ ]*,[ ]* {printf(" VIRG ");return (VIRG);}
@@ -68,7 +68,7 @@ endstruct {printf(" ENDSTRUCT ");return (ENDSTRUCT);}
 [ \t]* {printf(" SPACE ");return SPACE;}
 [ ]*\"[^\"]*\"[ ]* {printf(" CSTSTRING ");return (CSTSTRING);}
 [ \t\n]*[A-Za-z](_|[A-Za-z]|[0-9])*[ ]* { printf(" IDF ");yylval = atoi(yytext); return (IDF);}
-[\n\t]+ {printf(" JMP\n");num_ligne++; num_colone = 0; return (JMP);}
+[\n]+ {printf(" JMP\n");num_ligne++; num_colone = 0; return (JMP);}
 [ ]*0|-?[1-9][0-9]*[ ]* {printf(" CSTINT ");yylval = atoi(yytext); return (CSTINT);}
 [ ]*{float}[ ]* {printf(" CSTFLOAT "); return (CSTFLOAT);}
 %%

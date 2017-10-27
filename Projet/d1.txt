@@ -15,9 +15,43 @@ b = -4; c = 90.23 ;
 b = 5.02 % 2;
 b  = 98 / 0.8;
 
+
+
 /* ### test 7 ### */
 a = "sqfdf " + "sqfdsfdf"; b = "dfsqdfq " + 0.21;
 
+
+
+/* ### test 8 ### */
+while (x < a) do
+ begin
+  empty;
+  if ( a == 21 && a - b) then
+   begin
+    a = a + 2;
+   end
+  else
+   begin
+    a = a - 2;
+   end
+ end
+
+
+
+/* ### test 9  ### */
+write("%d fslkdfqms", b);
+write("qfdsdf", b + 5);
+write("sdqfdf", af());
+write ("sdfqsdf");
+
+/* ### test 10 ### */
+read ("%d",a);
+read("%f ", b);
+
+/* #### test 11 #### */
+return s;
+return "add" + " return ";
+return true;
 
 end
 

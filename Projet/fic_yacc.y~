@@ -2,7 +2,7 @@
 %token INT FLOAT CHAR STRING BOOL TRUE FALSE EQUAL NEQUAL LESS LESSEQ GREATER GREATEREQ OR AND 
 %token PLUS MINUS MULT DIV MOD POW 
 %token PO PF CO CF PP DP AFF
-%token CSTINT CSTFLOAT CSTSTRING FORMAT
+%token CSTINT CSTFLOAT CSTSTRING 
 %token JMP SPACE
 %token IDF
 %{
@@ -77,8 +77,6 @@ instruction           : affectation PVIRG
 	              | tant_que
 	              | appel PVIRG
                       | EMPTY PVIRG
-                      | ecrire PVIRG
-                      | lire PVIRG
 	              | RETURN resultat_retourne PVIRG
 		      ;
 resultat_retourne     :
@@ -86,17 +84,6 @@ resultat_retourne     :
 		      ;	
 appel                 : IDF liste_arguments
 		      ;
-ecrire                : WRITE PO CSTSTRING liste_args_ecrire PF
-                      ;
-liste_args_ecrire     :
-                      | VIRG un_arg
-		      | liste_args_ecrire VIRG un_arg
-		      ;
-lire                  : READ PO CSTSTRING liste_variable PF
-                      ;
-liste_variable        : VIRG variable
-                      | liste_variable VIRG variable
-                      ;
 liste_arguments       : PO liste_args PF
 		      ;
 
@@ -110,7 +97,7 @@ condition             : IF PO expression PF
                         THEN  liste_instructions
                         ELSE  liste_instructions
                       ;
-tant_que              : WHILE PO expression PF DO liste_instructions
+tant_que              : WHILE expression DO liste_instructions
                       ;
 affectation           : variable egal expression
 		      ;
@@ -119,24 +106,13 @@ egal                  : AFF
 variable              : IDF
                       ;
 concatenation         : CSTSTRING PLUS expression
+                      | expression PLUS CSTSTRING
                       | CSTSTRING PLUS CSTSTRING
                       ;
-booleen               : TRUE
-                      | FALSE
-                      ;
-expression            : e
+expression            : e_test {printf("\n");}
                       | concatenation
                       ;
-e                     : e1
-                      | e PLUS e1 
-                      | e MINUS e1 
-                      ;
-e1                    : e_test
-                      | e1 MULT e2 
-                      | e1 DIV e2 
-                      | e1 MOD e2
-                      ;
-e_test                : e2
+e_test                : e
                       | e_test EQUAL e
                       | e_test NEQUAL e
                       | e_test LESS e
@@ -146,11 +122,19 @@ e_test                : e2
                       | e_test OR e
                       | e_test AND e
                       ; 
+e                     : e1
+                      | e PLUS e1 {printf("+");}
+                      | e MINUS e1 {printf("-");}
+                      ;
+e1                    : e2
+                      | e1 MULT e2 {printf("*");}
+                      | e1 DIV e2 {printf("/");}
+                      | e1 MOD e2
+                      ;
 e2                    : PO e PF 
-                      | CSTINT 
+                      | CSTINT {printf("(%d) ",$1);}
                       | variable
 		      | appel
 		      | CSTFLOAT
-                      | booleen
                       ;
 %%
