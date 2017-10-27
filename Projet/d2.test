@@ -1,0 +1,11 @@
+prog
+begin
+
+/*
+test 2
+*/
+c = c * a;
+b = appel (  a ,  b );
+appel2 () ;
+
+end
