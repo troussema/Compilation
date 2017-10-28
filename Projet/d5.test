@@ -1,0 +1,16 @@
+// ### test 12 : declarations variable  ###
+prog
+
+var a : int;
+var n : float;
+var b : bool;
+
+begin
+
+  a = 2 + 3;
+  n = a - 4;
+  empty;
+
+  return b;
+
+end

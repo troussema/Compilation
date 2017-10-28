@@ -18,8 +18,8 @@ programme            : PROG corps
 corps                : liste_instructions
 	             | liste_declarations liste_instructions 
 	             ;
-liste_declarations   : declaration
-		     | liste_declarations PVIRG declaration
+liste_declarations   : declaration PVIRG
+		     | liste_declarations declaration PVIRG
                      ;
 liste_instructions   : BEGIN2 suite_liste_inst END
 		     ;
@@ -35,7 +35,7 @@ declaration_type       : TYPE IDF DP suite_declaration_type
 		       ;
 suite_declaration_type : STRUCT liste_champs ENDSTRUCT
 		       | ARRAY dimension OF nom_type
-		      ;
+		       ;
 dimension             : CO liste_dimensions CF
 		      ;
 liste_dimensions      : une_dimension
@@ -124,19 +124,10 @@ concatenation         : CSTSTRING PLUS expression
 booleen               : TRUE
                       | FALSE
                       ;
-expression            : e
+expression            : e_test
                       | concatenation
                       ;
-e                     : e1
-                      | e PLUS e1 
-                      | e MINUS e1 
-                      ;
-e1                    : e_test
-                      | e1 MULT e2 
-                      | e1 DIV e2 
-                      | e1 MOD e2
-                      ;
-e_test                : e2
+e_test                : e
                       | e_test EQUAL e
                       | e_test NEQUAL e
                       | e_test LESS e
@@ -146,6 +137,15 @@ e_test                : e2
                       | e_test OR e
                       | e_test AND e
                       ; 
+e                     : e1
+                      | e PLUS e1 
+                      | e MINUS e1 
+                      ;
+e1                    : e2
+                      | e1 MULT e2 
+                      | e1 DIV e2 
+                      | e1 MOD e2
+                      ;
 e2                    : PO e PF 
                       | CSTINT 
                       | variable
