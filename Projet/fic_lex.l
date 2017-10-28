@@ -67,6 +67,7 @@ endstruct {printf(" ENDSTRUCT ");return (ENDSTRUCT);}
 [ ]*\:[ ]* {printf(" DP ");return (DP);}
 [ ]*=[ ]* {printf(" AFF ");return (AFF);}
 [ \t]* {printf(" SPACE ");return SPACE;}
+[ ]*\'[^\']\'[ ]* {printf(" CSTCHAR ");return (CSTCHAR);}
 [ ]*\"[^\"]*\"[ ]* {printf(" CSTSTRING ");return (CSTSTRING);}
 [ \t\n]*[A-Za-z](_|[A-Za-z]|[0-9])*[ ]* { printf(" IDF ");yylval = atoi(yytext); return (IDF);}
 [\n\t]+ {printf(" JMP\n");num_ligne++; num_colone = 0; return (JMP);}

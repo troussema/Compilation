@@ -1,0 +1,38 @@
+prog
+
+var a : int=5;
+var x : foat;
+var signe: char='+';
+var b:string[50]="les res:";
+
+begin
+
+
+
+if ( a>b && (c/2)==0) then
+begin
+/* //---\ //*** || aze */
+
+
+// test 5 
+
+/* ce test ne marche pas :    ch = ch + "apres ";  mais
+ si tu met  ch= "apres" + ch ; comme lexemple en bas ça marche a tester */ 
+
+ch= "apres" + ch ;
+
+write("%s", ch);
+
+end
+
+
+/*else
+begin
+empty;
+end
+*/
+
+
+end
+
+

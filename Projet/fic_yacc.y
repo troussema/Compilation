@@ -2,7 +2,7 @@
 %token INT FLOAT CHAR STRING BOOL TRUE FALSE EQUAL NEQUAL LESS LESSEQ GREATER GREATEREQ OR AND 
 %token PLUS MINUS MULT DIV MOD POW 
 %token PO PF CO CF PP DP AFF
-%token CSTINT CSTFLOAT CSTSTRING FORMAT
+%token CSTINT CSTFLOAT CSTSTRING CSTCHAR FORMAT
 %token JMP SPACE
 %token IDF
 %{
@@ -58,6 +58,7 @@ type_simple           : INT
 		      | STRING CO CSTINT CF
 		      ;
 declaration_variable  : VAR IDF DP nom_type
+		      |VAR IDF DP nom_type AFF const
 		      ;
 declaration_procedure : PROCEDURE IDF liste_parametres corps
 		      ;
@@ -108,6 +109,8 @@ un_arg                : expression
                       ;
 condition             : IF PO expression PF
                         THEN  liste_instructions
+		      | IF PO expression PF
+                        THEN  liste_instructions
                         ELSE  liste_instructions
                       ;
 tant_que              : WHILE PO expression PF DO liste_instructions
@@ -153,4 +156,11 @@ e2                    : PO e PF
 		      | CSTFLOAT
                       | booleen
                       ;
+
+const: 	            CSTINT
+		    |CSTFLOAT
+		    |CSTCHAR
+		    |CSTSTRING
+		    |booleen 	
+		    ;
 %%
