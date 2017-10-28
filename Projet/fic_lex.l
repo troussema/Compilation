@@ -13,6 +13,7 @@ integer_pos {number}+
 float {integer}\.{integer_pos}
 %%
 [ \n]*\/\*({Y}|\*\**{Z}|\*\**\"{X}*\"|\"{X}*\")*\*\**\/[ \n]* {printf("COMMENTS\n");}
+[ \n]*\/\/.*[ \n]* {printf("COMMENTS\n");}
 prog[ \n\t]* {printf("PROG "); return (PROG);}
 [ \n\t]*begin[ \n\t]* {printf(" BEGIN2 ");return (BEGIN2);}
 [ \n\t]*end[ \n\t]* {printf(" END \n");return(END);}
