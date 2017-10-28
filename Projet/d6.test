@@ -2,8 +2,8 @@ prog
 
 var a : int=5;
 var x : foat;
-var signe: char='+';
-var b:string[50]="les res:";
+var signe : char = '+';
+var b : string[50] = "les res:";
 
 begin
 
