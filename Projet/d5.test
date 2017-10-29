@@ -7,7 +7,7 @@ var b : bool;
 
 begin
 
-  int c : float;
+  var c : float;
   
   a = 2 + 3;
   n = a - 4;
