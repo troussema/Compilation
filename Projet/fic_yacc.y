@@ -24,7 +24,7 @@ liste_declarations   : declaration PVIRG
 liste_instructions   : BEGIN2 suite_liste_inst END
 		     ;
 suite_liste_inst     : instruction
-		     | declaration_variable	
+		     | declaration_variable PVIRG	
                      | suite_liste_inst instruction 
 		     ;
 declaration          : declaration_type 
