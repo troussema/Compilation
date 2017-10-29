@@ -6,8 +6,8 @@ var n : float;
 var b : bool;
 
 begin
-  
-  var c : float;
+
+  int c : float;
   
   a = 2 + 3;
   n = a - 4;

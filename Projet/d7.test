@@ -1,0 +1,38 @@
+/* test des defines */
+
+#define PI=3.14;
+#define RES=0;
+#define RES2=0;
+
+
+prog
+
+var a : int=5;
+var x : float;
+
+
+
+begin
+
+
+
+if ( a>b && (c/2)==0) then
+begin
+
+
+
+// test 7 
+
+
+
+write("%s", ch);
+
+end
+
+
+
+
+
+end
+
+

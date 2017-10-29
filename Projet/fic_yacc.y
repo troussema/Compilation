@@ -5,6 +5,7 @@
 %token CSTINT CSTFLOAT CSTSTRING CSTCHAR FORMAT
 %token JMP SPACE
 %token IDF
+%token DEFINE
 %{
 #include <stdio.h>
 int yylex();
@@ -13,8 +14,16 @@ extern int num_ligne;
 extern int num_colone;
 %}
 %%
-programme            : PROG corps 
+programme            : liste_def PROG corps 
+		     | PROG corps 
                      ;
+
+liste_def	     : DEFINE  def PVIRG
+		     | liste_def DEFINE def PVIRG
+		     ;
+def 	             :IDF AFF CSTINT 
+		     |IDF AFF CSTFLOAT 
+		     ;
 corps                : liste_instructions
 	             | liste_declarations liste_instructions 
 	             ;
@@ -24,7 +33,6 @@ liste_declarations   : declaration PVIRG
 liste_instructions   : BEGIN2 suite_liste_inst END
 		     ;
 suite_liste_inst     : instruction
-		     | declaration_variable PVIRG	
                      | suite_liste_inst instruction 
 		     ;
 declaration          : declaration_type 

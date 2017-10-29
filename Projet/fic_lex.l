@@ -73,4 +73,6 @@ endstruct {printf(" ENDSTRUCT ");return (ENDSTRUCT);}
 [\n\t]+ {printf(" JMP\n");num_ligne++; num_colone = 0; return (JMP);}
 [ ]*0|-?[1-9][0-9]*[ ]* {printf(" CSTINT ");yylval = atoi(yytext); return (CSTINT);}
 [ ]*{float}[ ]* {printf(" CSTFLOAT "); return (CSTFLOAT);}
+[ ]*#define[ ]* {printf(" #DEFINE ");return (DEFINE);}
+
 %%
