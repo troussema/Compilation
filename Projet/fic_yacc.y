@@ -18,11 +18,9 @@ programme            : liste_def PROG corps
 		     | PROG corps 
                      ;
 
-liste_def	     : DEFINE  def PVIRG  
-		     | liste_def DEFINE def  PVIRG
+liste_def	     : DEFINE  
+                     | liste_def DEFINE
 		     ;
-def 	      :IDF  CSTINT  
-		     |IDF CSTFLOAT 
 		     ;
 corps                : liste_instructions
 	             | liste_declarations liste_instructions 
