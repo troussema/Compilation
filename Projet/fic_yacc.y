@@ -4,8 +4,8 @@
 %token PO PF CO CF PP DP AFF
 %token CSTINT CSTFLOAT CSTSTRING CSTCHAR FORMAT
 %token JMP SPACE
-%token IDF
-%token DEFINE
+%token IDF 
+%token DEFINE 
 %{
 #include <stdio.h>
 int yylex();
@@ -18,11 +18,11 @@ programme            : liste_def PROG corps
 		     | PROG corps 
                      ;
 
-liste_def	     : DEFINE  def PVIRG
-		     | liste_def DEFINE def PVIRG
+liste_def	     : DEFINE  def PVIRG  
+		     | liste_def DEFINE def  PVIRG
 		     ;
-def 	             :IDF AFF CSTINT 
-		     |IDF AFF CSTFLOAT 
+def 	      :IDF  CSTINT  
+		     |IDF CSTFLOAT 
 		     ;
 corps                : liste_instructions
 	             | liste_declarations liste_instructions 
