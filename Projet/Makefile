@@ -16,4 +16,4 @@ c2 : y.tab.c lex.yy.o
 	$(CC) -v -o analyseur y.tab.c lex.yy.o -ly -ll
 
 clean :
-	rm -f *.o *.c *.h *.output *~
+	rm -f *.o  *.c *.h *.output *~

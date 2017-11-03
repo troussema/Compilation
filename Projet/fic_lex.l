@@ -1,6 +1,7 @@
 %{
 #include "y.tab.h"
 #include <stdio.h>
+
 int num_ligne = 1;
 int num_colone = 0;
 %}

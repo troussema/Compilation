@@ -8,10 +8,24 @@
 %token DEFINE 
 %{
 #include <stdio.h>
+#include "tables/table_lexicographique.c"
+int main();
 int yylex();
 void yyerror(const char *s);  
 extern int num_ligne;
 extern int num_colone;
+
+int nb_lex=0;
+
+char *tab_l[]={"PROG""BEGIN2","END","EMPTY","PVIRG","VIRG","VAR","TYPE","STRUCT","ENDSTRUCT",
+"ARRAY","OF","PROCEDURE","FUNCTION","RETURN","WRITE","READ","FOR","WHILE","DO","IF","THEN","ELSE",
+"ELSEIF","INT","FLOAT","CHAR","STRING","BOOL","TRUE","FALSE","EQUAL","NEQUAL","LESS","LESSEQ",
+"GREATER","GREATEREQ","OR","AND","PLUS","MINUS","MULT","DIV","MOD","POW","PO","PF","CO","CF","PP","DP","AFF",
+"CSTINT","CSTFLOAT","CSTSTRING","CSTCHAR","FORMAT","JMP","SPACE","IDF","DEFINE",};
+
+int lg_tab = sizeof(tab_l) / sizeof(tab_l[0]);
+
+
 %}
 %%
 programme            : liste_def PROG corps 
@@ -172,3 +186,21 @@ const: 	            CSTINT
 		    |booleen 	
 		    ;
 %%
+int main(void){
+	yyparse();
+	
+	init_table();
+	
+	for (int i=nb_lex;i<lg_tab;i++)
+	{
+	remplissage_table_lexeme(tab_l[i],i);
+	}
+
+	nb_lex=(nb_lex+lg_tab)-1;
+	
+	affichage_table();
+
+
+	return 0;
+}
+
