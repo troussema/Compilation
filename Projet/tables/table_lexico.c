@@ -185,9 +185,9 @@ for ( i = 0 ;(i<TAILLE_MAX ) ;i++)
 		{
 	ret=strcmp(ch,table_lex[i].contenue);
 	if(ret==0)
-	return 1;
+	return table_lex[i].numlex;
 		}
-return 0;
+return -1;
 }
 
 char* effaceespace(char* ch)

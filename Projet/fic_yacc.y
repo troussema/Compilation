@@ -191,7 +191,7 @@ int main(void){
 	
 	for (int i=nb_lex;i<nb_tab;i++)
 	{ 
-	if (!(existe_lex(tab_l[i])) )
+	if ((existe_lex(tab_l[i])==-1) )
 	remplissage_tab_lex(tab_l[i],i);
 	}
 	
@@ -200,6 +200,11 @@ int main(void){
 	
 	affichage_tab_lex();
 
+
+	//exemple pour solo
+		
+	int tst=existe_lex("char"); printf("existe: %d\n",tst);
+	int tst2=existe_lex("blabla");printf("existe pas: %d\n",tst2);
 
 	return 0;
 }
