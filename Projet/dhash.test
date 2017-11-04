@@ -1,0 +1,32 @@
+/* test des defines */
+
+#define PI 3.1
+#define RES 0
+#define RES2 0
+#define AUTRE 5
+
+
+prog
+
+var asterix : int=5;
+var atsrexi : float;
+
+
+
+
+begin
+
+
+cxashr=5;
+rcxahs=2;
+
+write("%d", shracx);
+
+
+
+
+
+
+end
+
+

@@ -8,22 +8,18 @@
 %token DEFINE 
 %{
 #include <stdio.h>
-#include "tables/table_lexicographique.c"
+#include "tables/table_lexico.c"
+#define TAILLE_MAX 1000 
+
 int main();
 int yylex();
 void yyerror(const char *s);  
 extern int num_ligne;
 extern int num_colone;
 
-int nb_lex=0;
-
-char *tab_l[]={"PROG""BEGIN2","END","EMPTY","PVIRG","VIRG","VAR","TYPE","STRUCT","ENDSTRUCT",
-"ARRAY","OF","PROCEDURE","FUNCTION","RETURN","WRITE","READ","FOR","WHILE","DO","IF","THEN","ELSE",
-"ELSEIF","INT","FLOAT","CHAR","STRING","BOOL","TRUE","FALSE","EQUAL","NEQUAL","LESS","LESSEQ",
-"GREATER","GREATEREQ","OR","AND","PLUS","MINUS","MULT","DIV","MOD","POW","PO","PF","CO","CF","PP","DP","AFF",
-"CSTINT","CSTFLOAT","CSTSTRING","CSTCHAR","FORMAT","JMP","SPACE","IDF","DEFINE",};
-
-int lg_tab = sizeof(tab_l) / sizeof(tab_l[0]);
+int nb_lex=5; //car il y'a avant des types binaires (int,float,bool,char,string)
+int nb_tab=5;
+char *tab_l[TAILLE_MAX]={"vide"};
 
 
 %}
@@ -141,7 +137,7 @@ affectation           : variable egal expression
 		      ;
 egal                  : AFF
                       ;
-variable              : IDF{printf("( %s )", $1);}
+variable              : IDF{{tab_l[nb_tab]=effaceespace($1);nb_tab++;} printf("( %s )", $1);} 
                       ;
 concatenation         : CSTSTRING PLUS expression
                       | CSTSTRING PLUS CSTSTRING
@@ -188,6 +184,22 @@ const: 	            CSTINT
 %%
 int main(void){
 	yyparse();
+	
+
+	init_tab_lex();
+	
+	
+	for (int i=nb_lex;i<nb_tab;i++)
+	{ 
+	if (!(existe_lex(tab_l[i])) )
+	remplissage_tab_lex(tab_l[i],i);
+	}
+	
+	init_tab_hash();
+	remplissage_tab_hash();
+	
+	affichage_tab_lex();
+
 
 	return 0;
 }
