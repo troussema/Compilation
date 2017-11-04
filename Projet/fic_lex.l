@@ -70,7 +70,7 @@ endstruct {printf(" ENDSTRUCT ");return (ENDSTRUCT);}
 [ \t]* {printf(" SPACE ");return SPACE;}
 [ ]*\'[^\']\'[ ]* {printf(" CSTCHAR ");return (CSTCHAR);}
 [ ]*\"[^\"]*\"[ ]* {printf(" CSTSTRING ");return (CSTSTRING);}
-[ \t\n]*[A-Za-z](_|[A-Za-z]|[0-9])*[ ]* { printf(" IDF ");yylval = atoi(yytext); return (IDF);}
+[ \t\n]*[A-Za-z](_|[A-Za-z]|[0-9])*[ ]* { printf(" IDF ");yylval = strdup(yytext); return (IDF);}
 [ \t]*\n+[ \t]* {printf(" JMP\n");num_ligne++; num_colone = 0; return (JMP);}
 [ ]*0|-?[1-9][0-9]*[ ]* {printf(" CSTINT ");yylval = atoi(yytext); return (CSTINT);}
 [ ]*{float}[ ]* {printf(" CSTFLOAT "); return (CSTFLOAT);}

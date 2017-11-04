@@ -21,11 +21,11 @@ _Oussema TRABELSI - Mohamed HABIB - Solofo RABONARIJAONA_
 ## consige de codage
 
 + **Pour l'ensemble du projet voici les règles de nomination des variables:**
-- Toutes les variables en minuscules 
-- Toutes les constantes en magiscules
-- Les noms des variables doivent etres explicite.
-- Le code doit être indempté et commenté pour permetre la compréhension
-- Le nom des methodes doivent être explicite aussi c'est à dire très specifique par rapport à ce qu'il fait. 
+ - Toutes les variables en minuscules 
+ - Toutes les constantes en magiscules
+ - Les noms des variables doivent etres explicite.
+ - Le code doit être indempté et commenté pour permetre la compréhension
+ - Le nom des methodes doivent être explicite aussi c'est à dire très specifique par rapport à ce qu'il fait. 
  ## OBJECTIF    
  + **Samedi 06/10** :Terminer la version avec remplissage de tout les tables
 

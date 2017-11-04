@@ -53,7 +53,7 @@ declaration          : declaration_type
 	             | declaration_procedure 
 	             | declaration_fonction 
 	             ;
-declaration_type       : TYPE IDF DP suite_declaration_type
+declaration_type       : TYPE variable DP suite_declaration_type
 		       ;
 suite_declaration_type : STRUCT liste_champs ENDSTRUCT
 		       | ARRAY dimension OF nom_type
@@ -68,10 +68,10 @@ une_dimension         : expression PP expression
 liste_champs          : un_champ
 		      | liste_champs PVIRG un_champ
 		      ;
-un_champ              : IDF DP nom_type
+un_champ              : variable DP nom_type
 		      ;
 nom_type              : type_simple
-		      | IDF
+		      | variable
 		      ;
 type_simple           : INT
 	              | FLOAT
@@ -79,12 +79,12 @@ type_simple           : INT
 		      | CHAR
 		      | STRING CO CSTINT CF
 		      ;
-declaration_variable  : VAR IDF DP nom_type
-		      |VAR IDF DP nom_type AFF const
+declaration_variable  : VAR variable DP nom_type
+		      |VAR variable DP nom_type AFF const
 		      ;
-declaration_procedure : PROCEDURE IDF liste_parametres corps
+declaration_procedure : PROCEDURE variable liste_parametres corps
 		      ;
-declaration_fonction  : FUNCTION IDF liste_parametres RETURN type_simple corps
+declaration_fonction  : FUNCTION variable liste_parametres RETURN type_simple corps
 		      ;
 liste_parametres      : 
 		      | PO liste_param PF
@@ -93,7 +93,7 @@ liste_parametres      :
 liste_param           : un_param
            	      | liste_param PVIRG un_param
 		      ;
-un_param              : IDF DP type_simple
+un_param              : variable DP type_simple
 	 	      ;
 instruction           : affectation PVIRG 
 	              | condition
@@ -107,7 +107,7 @@ instruction           : affectation PVIRG
 resultat_retourne     :
 		      | expression
 		      ;	
-appel                 : IDF liste_arguments
+appel                 : variable liste_arguments
 		      ;
 ecrire                : WRITE PO CSTSTRING liste_args_ecrire PF
                       ;
@@ -141,7 +141,7 @@ affectation           : variable egal expression
 		      ;
 egal                  : AFF
                       ;
-variable              : IDF
+variable              : IDF{printf("( %s )", $1);}
                       ;
 concatenation         : CSTSTRING PLUS expression
                       | CSTSTRING PLUS CSTSTRING
@@ -188,18 +188,6 @@ const: 	            CSTINT
 %%
 int main(void){
 	yyparse();
-	
-	init_table();
-	
-	for (int i=nb_lex;i<lg_tab;i++)
-	{
-	remplissage_table_lexeme(tab_l[i],i);
-	}
-
-	nb_lex=(nb_lex+lg_tab)-1;
-	
-	affichage_table();
-
 
 	return 0;
 }
