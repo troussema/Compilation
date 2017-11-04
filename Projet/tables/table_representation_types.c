@@ -1,66 +1,95 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+
 #define TAILLE_MAX 1000 /* c'est gratuit */
 #define MV -2  /* Solo ;) */ 
 
+
 int table_representation_types[TAILLE_MAX];
 /*Variables a donner*/
-int code_type;/* le code du type A donner par le Chef Ouss */
-int contenue_type; /*A donner par le chef Solo*/
+int nombre_champ; /*les champs qui contient le types*/
+int num_lexical; /*numero dans la table lexico*/
+int num_declaration; /*numero de declaration de type dans 
+						la table des declaration*/
 int pointeur; /*Statique donc a nous de faire un pointeur */
 
-/*commencant par le plus simple 
-	l'initialisation de la table
-		comme ça je commite ce soir
-*/
+
+
+
 
 void initialisation_table(){
-	int i;
+
+        int i;
 	for ( i = 0; i < TAILLE_MAX; i++)
 	{
 		table_representation_types[i]=-1;/*les autre numeron
-										   on a besoin sauf les moins*/
+								 on a besoin sauf les moins*/
 	}
 }
 
 void affichage_table(){
-	int i;
+
+        int i;
+	
 	for ( i = 0 
 		 ;(i < TAILLE_MAX) && (table_representation_types[i]!=-1)
 		 ;i++)
 		{
-			printf("%d ----\t",i);
-			printf("--");
-			printf(" %d\n",table_representation_types[i] );	
+			printf("|");
 			
+			printf("%d \t",i);
+			printf("|");
+			/*les condition juste pour un affichage non decaler*/
+			
+			if(table_representation_types[i]<0)
+				printf(" %d     |\n",table_representation_types[i] );	
+			
+			else
+				printf(" %d      |\n",table_representation_types[i] );
 
 		}
 }	
 
 /*Remplissage de la table de representation type par les donner*/
 
-void remplissage_table(int contenue_type, int code_type){
-      table_representation_types[pointeur]=contenue_type;
+void remplissage_table(int nombre_champ, int num_lexical, int num_declaration){
+
+      table_representation_types[pointeur]=nombre_champ;
       pointeur++;
-      table_representation_types[pointeur]= code_type;
+
+      table_representation_types[pointeur]= num_lexical;
       pointeur++;
-      table_representation_types[pointeur]= code_type;
+
+      table_representation_types[pointeur]= num_declaration;
       pointeur++;
+
       table_representation_types[pointeur]= MV;
       pointeur++;
 }
 
-/*Juste pour le test*/
+
+/*pour le teste*/
 
 int main(int argc, char const *argv[])
 {
-	/* code */
 	printf("\nTable de representation des types\n\n");
-	printf("Il manque les donnees lexem a definire plus tard\n\n");
+
+	printf("_________________\n");
+	printf("|   i   | descrip|\n");
+	printf("|_______|________|\n");
+
 	initialisation_table();
-	remplissage_table(contenue_type, code_type);
+	
+	remplissage_table(3,5,0);
+	remplissage_table(6,0,5);
+	remplissage_table(5,5,3);
+	
+
 	affichage_table();
-	printf("\n\n");
+
+	printf("|_______|________|\n");
 	return 0;
+	
 }
