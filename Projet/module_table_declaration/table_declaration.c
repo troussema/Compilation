@@ -5,7 +5,7 @@
  * Auteur: SOLOFO RABONARIJAONA                                                 *
  *                                                                              *
  * Historique:                                                                  *
- *     - Creation le 03/11/17  par S.RABONARIJAONA                              *
+ *     - Creation le 03/11/17  par S.RABONARIJAONA                              *      - Modification le 05/11/17 par S.RABONARIJAONA
  *                                                                              *
  *------------------------------------------------------------------------------*/
 
@@ -24,11 +24,12 @@ int compteur_description_type_entete = 0;
 void inserer(char lexeme[100], int nature, int region, int description, int execution)
 {
   int i; 			/* courant sur table */
-  int index /* = renvoyer_index(lexeme) ### DONNER PAR OUSSEMA TRABELSI ### */; /* recuperer l'indice du lexeme dans la table lexicographique */
-  if (strcmp(lexeme, "int") == 0)
-    index = 0;
-  if (strcmp(lexeme, "char") == 0)
-    index = 1;
+  int index = existe_lex(lexeme) /* ### DONNER PAR OUSSEMA TRABELSI ### */; /* recuperer l'indice du lexeme dans la table lexicographique */
+  if (index == -1)
+  {
+    fprintf(stderr, "le lexeme n'existe pas dans la table lexicographique");
+    exit(EXIT_FAILURE);
+  }
 
   /* verifier si le lexeme existe deja dans la zone normale */
   if(table_declaration[index].a_ete_insere == TRUE)
@@ -85,11 +86,10 @@ void init_table()
     table_declaration[i].a_ete_insere = FALSE;
   }
   inserer("int", TYPE_SIMPLE, 0, 0, 1);
-  //inserer("int", TYPE_SIMPLE, 0, 0, 1);
-  /* inserer("float", TYPE_SIMPLE, 0, 1, 1); */
-  /* inserer("bool", TYPE_SIMPLE, 0, 2, 1); */
+  inserer("float", TYPE_SIMPLE, 0, 1, 1);
+  inserer("bool", TYPE_SIMPLE, 0, 2, 1);
   inserer("char", TYPE_SIMPLE, 0, 3, 1);
-  /* inserer("string", TYPE_SIMPLE, 0, 4, 1); */
+  inserer("string", TYPE_SIMPLE, 0, 4, 1);
 }
 
 
