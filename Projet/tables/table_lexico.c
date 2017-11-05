@@ -1,16 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "table_lexico.h"
 
-#define TAILLE_MAX 1000 
 
-typedef struct structlex 
-{
-	int numlex;
-	int longeur;
-	char *contenue;
-	int suiv;
-} structlex;
 
 structlex table_lex[TAILLE_MAX];
 
@@ -204,7 +197,3 @@ char* effaceespace(char* ch)
 }
 
 
-int main_tab_lex()
-{
-
-}
