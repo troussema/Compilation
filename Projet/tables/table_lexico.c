@@ -59,7 +59,7 @@ for ( i = 0; i < TAILLE_MAX; i++)
 	table_lex[k].suiv=i;		
 	}
 	
-	}while (trouve=0 && k>0);	
+	}while (trouve==0 && k>0);	
 
 	}
 

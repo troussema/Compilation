@@ -13,24 +13,25 @@
 #ifndef TABLE_DECLARATION_H
 
 #define TABLE_DECLARATION_H
-#define TAILLE_TABLE_DECLARATION 200
-#define OFFSET_DEBORDEMENT 100
+#define TAILLE_TABLE_DECLARATION 20
+#define OFFSET_DEBORDEMENT 10
 #define LONGUEUR_LEXEME_MAX 100
-#define FALSE 0
-#define TRUE 1
+#define FAUX 0
+#define VRAI 1
+
 
 enum Nature{
   TYPE_SIMPLE, 			/* les types simples : int bool float ... */
   TYPE_STRUCT,			
   TYPE_ARRAY,
-  VAR,
-  FUNC,
-  PROC
+  TYPE_VAR,
+  TYPE_FUNC,
+  TYPE_PROC
 };
 
 typedef struct {/* structure de la table des déclarations */
   int index;
-  char lexeme[100];
+  char lexeme[LONGUEUR_LEXEME_MAX];
   int nature;
   int suivant;
   int region;
@@ -38,18 +39,53 @@ typedef struct {/* structure de la table des déclarations */
   int execution;
   int a_ete_insere;
 }declaration;
+typedef struct {
+  char lexeme[LONGUEUR_LEXEME_MAX];
+  int nature;
+}declaration_aux;
 
 
 /* déclaration des fonctions  */
 
-
+/* =========== Insere un lexeme dans la table declaration auxiliaire ====== */
+void inserer_aux(char lexeme[LONGUEUR_LEXEME_MAX], int nature);
 /* =========== Insere une ligne dans la table ========== */
-void inserer(char *lexeme, int nature, int region, int description, int execution);
+void inserer(char lexeme[LONGUEUR_LEXEME_MAX], int nature, int region, int description, int execution);
 /* ============ modifier le champ suivant d'une declaration ============== */
 void modifier_suivant(int index, int new_suivant);
 /* ============= affiche la table à la sortie standard =============== */
 void afficher_table();
 /* =========== Initialise la table (insere les types simples) ======== */
 void init_table();
+
+
+/* --------------------  TABLE LEXICOGRAPHIQUE----------------------------- */
+
+#define TAILLE_MAX 1000 
+
+typedef struct
+{
+	int numlex;
+	int longeur;
+	char *contenue;
+	int suiv;
+} structlex;
+
+int nb_lex=5; //car il y'a avant des types binaires (int,float,bool,char,string)
+int nb_tab=5;
+char *tab_l[TAILLE_MAX]={"vide"};
+
+/* déclaration des fonctions  */
+void init_tab_hash();
+int calcul_hash();
+void remplissage_tab_hash();
+
+void init_tab_lex();
+void affichage_tab_lex();
+void remplissage_tab_lex(char* ch,int n);
+
+int existe_lex(char* ch);
+char* effaceespace(char* ch);
+
 
 #endif

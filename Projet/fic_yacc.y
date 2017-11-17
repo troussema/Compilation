@@ -8,24 +8,22 @@
 %token DEFINE 
 %{
 #include <stdio.h>
-#include "tables/table_lexico.c"
+#include "tables/table_declaration.h"
+#include "tables/table_declaration.c"
 #define TAILLE_MAX 1000 
 
 int main();
 int yylex();
-void yyerror(const char *s);  
+void yyerror(const char *s);
 extern int num_ligne;
 extern int num_colone;
 
-int nb_lex=5; //car il y'a avant des types binaires (int,float,bool,char,string)
-int nb_tab=5;
-char *tab_l[TAILLE_MAX]={"vide"};
 
 
 %}
 %%
-programme            : liste_def PROG corps 
-		     | PROG corps 
+programme            : liste_def PROG corps
+                     | PROG corps
                      ;
 
 liste_def	     : DEFINE  
@@ -35,25 +33,23 @@ liste_def	     : DEFINE
 corps                : liste_instructions
 	             | liste_declarations liste_instructions 
 	             ;
-liste_declarations   : declaration PVIRG
-		     | liste_declarations declaration PVIRG
+liste_declarations   : declaration
+		     | liste_declarations declaration
                      ;
 liste_instructions   : BEGIN2 suite_liste_inst END
 		     ;
 suite_liste_inst     : instruction
-		     | declaration_variable PVIRG
+		     | liste_declarations suite_liste_inst
                      | suite_liste_inst instruction 
 		     ;
 declaration          : declaration_type 
-	             | declaration_variable
+	             | declaration_variable PVIRG
 	             | declaration_procedure 
 	             | declaration_fonction 
 	             ;
-declaration_type       : TYPE variable DP suite_declaration_type
-		       ;
-suite_declaration_type : STRUCT liste_champs ENDSTRUCT
-		       | ARRAY dimension OF nom_type
-		       ;
+declaration_type     : TYPE variable DP STRUCT liste_champs ENDSTRUCT      {printf("** %s", $2); inserer_aux($2, TYPE_STRUCT);}
+                     | TYPE variable DP ARRAY dimension OF nom_type PVIRG  {printf("** %s", $2); inserer_aux($2, TYPE_ARRAY);}
+		     ;
 dimension             : CO liste_dimensions CF
 		      ;
 liste_dimensions      : une_dimension
@@ -61,8 +57,8 @@ liste_dimensions      : une_dimension
 		      ;
 une_dimension         : expression PP expression 
 		      ;
-liste_champs          : un_champ
-		      | liste_champs PVIRG un_champ
+liste_champs          : un_champ PVIRG
+		      | liste_champs un_champ PVIRG
 		      ;
 un_champ              : variable DP nom_type
 		      ;
@@ -75,19 +71,19 @@ type_simple           : INT
 		      | CHAR
 		      | STRING CO CSTINT CF
 		      ;
-declaration_variable  : VAR variable DP nom_type
-		      |VAR variable DP nom_type AFF const
+declaration_variable  : VAR variable DP nom_type { printf("** %s",$2);inserer_aux($2, TYPE_VAR);}
+                      | VAR variable DP nom_type AFF const {printf("** %s", $2);inserer_aux($2, TYPE_VAR);}
 		      ;
-declaration_procedure : PROCEDURE variable liste_parametres corps
+declaration_procedure : PROCEDURE variable liste_parametres corps {printf("** %s", $2); inserer_aux($2, TYPE_PROC);}
 		      ;
-declaration_fonction  : FUNCTION variable liste_parametres RETURN type_simple corps
+declaration_fonction  : FUNCTION variable liste_parametres RETURN type_simple corps {printf("** %s", $2); inserer_aux($2, TYPE_FUNC);}
 		      ;
 liste_parametres      : 
 		      | PO liste_param PF
 		      ;
 
 liste_param           : un_param
-           	      | liste_param PVIRG un_param
+           	      | liste_param VIRG un_param
 		      ;
 un_param              : variable DP type_simple
 	 	      ;
@@ -137,7 +133,7 @@ affectation           : variable egal expression
 		      ;
 egal                  : AFF
                       ;
-variable              : IDF{{tab_l[nb_tab]=effaceespace($1);nb_tab++;} printf("( %s )", $1);} 
+variable              : IDF {tab_l[nb_tab]=effaceespace($1);nb_tab++; printf("( %s )", $1); $$ =effaceespace($1);} 
                       ;
 concatenation         : CSTSTRING PLUS expression
                       | CSTSTRING PLUS CSTSTRING
@@ -184,27 +180,30 @@ const: 	            CSTINT
 %%
 int main(void){
 	yyparse();
-	
 
 	init_tab_lex();
-	
 	
 	for (int i=nb_lex;i<nb_tab;i++)
 	{ 
 	if ((existe_lex(tab_l[i])==-1) )
 	remplissage_tab_lex(tab_l[i],i);
 	}
-	
+
 	init_tab_hash();
 	remplissage_tab_hash();
+
+	init_table();		/* initialisation table declaration */
+	/* remplissage table declaration */
+	while (compteur_table_declaration_aux >= 0)
+	  inserer(table_declaration_aux[compteur_table_declaration_aux].lexeme, table_declaration_aux[compteur_table_declaration_aux--].nature, 9, 9, 9);
 	
 	affichage_tab_lex();
-
-
+	afficher_table();	/* afficher table declaration */
+	
 	//exemple pour solo
 		
-	int tst=existe_lex("char"); printf("existe: %d\n",tst);
-	int tst2=existe_lex("blabla");printf("existe pas: %d\n",tst2);
+	/* int tst=existe_lex("char"); printf("existe: %d\n",tst); */
+	/* int tst2=existe_lex("blabla");printf("existe pas: %d\n",tst2); */
 
 	return 0;
 }

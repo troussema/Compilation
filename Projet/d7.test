@@ -9,8 +9,10 @@
 prog
 
 var a : int=5;
+var ch : char;
 var x : float;
 
+var hc : int;
 
 
 begin

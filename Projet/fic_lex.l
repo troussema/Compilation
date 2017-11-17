@@ -22,13 +22,13 @@ prog[ \n\t]* {printf("PROG "); return (PROG);}
 [ ]*;[ \t\n]* {printf(" PVIRG ");return (PVIRG);}
 [ ]*,[ ]* {printf(" VIRG ");return (VIRG);}
 [ \n\t]*var[ ]* {printf(" VAR ");return (VAR);}
-[ \t\n]type[ ]* {printf(" TYPE ");return (TYPE);}
+[ \t\n]*type[ ]* {printf(" TYPE ");return (TYPE);}
 [ ]*struct[ \t\n]* {printf(" STRUCT ");return (STRUCT);}
 endstruct {printf(" ENDSTRUCT ");return (ENDSTRUCT);}
 [ ]*array[ ]* {printf(" ARRAY ");return (ARRAY);}
 [ ]*of[ ]* {printf(" OF ");return (OF);}
-[ \t\n]proc[ ]* {printf(" PROC ");return (PROCEDURE);}
-[ \t\n]func[ ]* {printf(" FUNC ");return (FUNCTION);}
+[ \t\n]*proc[ ]* {printf(" PROC ");return (PROCEDURE);}
+[ \t\n]*func[ ]* {printf(" FUNC ");return (FUNCTION);}
 [ \t\n]*return[ ]* {printf(" RETURN ");return (RETURN);}
 [ \t\n]*write[ ]* {printf(" WRITE ");return (WRITE);}            
 [ \t\n]*read[ ]* {printf(" READ ");return (READ);} 

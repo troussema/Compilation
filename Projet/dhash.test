@@ -9,15 +9,37 @@
 prog
 
 var asterix : int=5;
+var h : int;
 var atsrexi : float;
 
+/* Test declaration d'un type structure */
+type asterix : struct
+     j : int;
+     i : bool;
+endstruct
 
+/* Test declaration d'un type array  */
+type atsrexi : array [1..4] of float;
+
+/* Test declaration procedure */
+proc asterix (i : int, j : float)
+begin
+	write("hello");
+end
+
+/* Test declaration fonction */
+func atsrexi (a:int, b:float) return int
+begin
+	a=2;
+	return a;
+end
 
 
 begin
 
 
 cxashr=5;
+x = 5;
 rcxahs=2;
 
 write("%d", shracx);
