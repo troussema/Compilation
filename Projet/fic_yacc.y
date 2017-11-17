@@ -10,6 +10,13 @@
 #include <stdio.h>
 #include "tables/table_declaration.h"
 #include "tables/table_declaration.c"
+#include "tables/table_representation_types/table_representation_types.c"  
+  /*icluuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuur
+
+fffffffffffffffffffff
+
+
+*/
 #define TAILLE_MAX 1000 
 
 int main();
@@ -18,9 +25,20 @@ void yyerror(const char *s);
 extern int num_ligne;
 extern int num_colone;
 
+/*Pour table de representation*/
+ int num_lexeme=0;
+ int champs_structure=0;
+ int born=0;
+ int champs_tableau=0;
+ int nombre_parametres=0;
 
+ 
+ 
+ 
+ 
 
 %}
+
 %%
 programme            : liste_def PROG corps
                      | PROG corps
@@ -47,45 +65,82 @@ declaration          : declaration_type
 	             | declaration_procedure 
 	             | declaration_fonction 
 	             ;
-declaration_type     : TYPE variable DP STRUCT liste_champs ENDSTRUCT      {printf("** %s", $2); inserer_aux($2, TYPE_STRUCT);}
-                     | TYPE variable DP ARRAY dimension OF nom_type PVIRG  {printf("** %s", $2); inserer_aux($2, TYPE_ARRAY);}
+declaration_type     : TYPE variable DP STRUCT {		
+                            champs_structure = 0;
+                            nbr_champs();
+                          } liste_champs {
+                            champs(champs_structure);
+			                      
+                            
+                            
+                          }  ENDSTRUCT  {printf("** %s", $2); inserer_aux($2, TYPE_STRUCT);
+}
+                     | TYPE variable DP ARRAY {		
+                            champs_tableau = 0;
+			                      type_tableau();
+                            nbr_champs();
+
+                          }  dimension {
+                            champs(champs_tableau);
+			      
+                          }  OF nom_type {
+			                   
+                          borne_tableau(champs_tableau);
+                          
+                         
+                          
+                        }  PVIRG  {printf("** %s", $2); inserer_aux($2, TYPE_ARRAY);}
 		     ;
 dimension             : CO liste_dimensions CF
 		      ;
-liste_dimensions      : une_dimension
-		      | liste_dimensions VIRG une_dimension
+liste_dimensions      : une_dimension {champs_tableau++;}
+		      | liste_dimensions VIRG une_dimension {champs_tableau++;}
 		      ;
-une_dimension         : expression PP expression 
+une_dimension         : CSTINT PP CSTINT {
+                         
+                            inserer_table_representation($1); //CSTINT
+                            inserer_table_representation($3); //CSTINT
+                          }
 		      ;
-liste_champs          : un_champ PVIRG
-		      | liste_champs un_champ PVIRG
+liste_champs          : un_champ  PVIRG {champs_structure++;}
+| liste_champs un_champ PVIRG {champs_structure++;}
 		      ;
-un_champ              : variable DP nom_type
+un_champ              : variable DP nom_type {
+                            
+                            inserer_table_representation($1);//variable
+                            inserer_table_representation($3);//nom_type
+//Machine virtuel                            
+inserer_table_representation(-2);//Machine virtuel
+                           
+                          }
 		      ;
 nom_type              : type_simple
 		      | variable
 		      ;
-type_simple           : INT
-	              | FLOAT
-	              | BOOL
-		      | CHAR
-		      | STRING CO CSTINT CF
+type_simple           : INT  {$$=0;}  
+	              | FLOAT  {$$=1;}
+	              | BOOL  {$$=2;}
+		      | CHAR  {$$=3;}
+		      | STRING CO CSTINT CF  {$$=4;}
 		      ;
-declaration_variable  : VAR variable DP nom_type { printf("** %s",$2);inserer_aux($2, TYPE_VAR);}
+declaration_variable  : VAR variable DP nom_type   { printf("** %s",$2);inserer_aux($2, TYPE_VAR);
+
+		     }
                       | VAR variable DP nom_type AFF const {printf("** %s", $2);inserer_aux($2, TYPE_VAR);}
 		      ;
 declaration_procedure : PROCEDURE variable liste_parametres corps {printf("** %s", $2); inserer_aux($2, TYPE_PROC);}
 		      ;
-declaration_fonction  : FUNCTION variable liste_parametres RETURN type_simple corps {printf("** %s", $2); inserer_aux($2, TYPE_FUNC);}
+declaration_fonction  : FUNCTION variable liste_parametres RETURN type_simple
+                            corps {printf("** %s", $2); inserer_aux($2, TYPE_FUNC);}
 		      ;
 liste_parametres      : 
 		      | PO liste_param PF
 		      ;
 
-liste_param           : un_param
-           	      | liste_param VIRG un_param
+liste_param           : un_param {nombre_parametres++;}
+           	      | liste_param {nombre_parametres++;}  VIRG un_param
 		      ;
-un_param              : variable DP type_simple
+un_param              : variable DP type_simple 
 	 	      ;
 instruction           : affectation PVIRG 
 	              | condition
@@ -133,7 +188,7 @@ affectation           : variable egal expression
 		      ;
 egal                  : AFF
                       ;
-variable              : IDF {tab_l[nb_tab]=effaceespace($1);nb_tab++; printf("( %s )", $1); $$ =effaceespace($1);} 
+variable              : IDF {tab_l[nb_tab]=effaceespace($1);nb_tab++; printf("( %s )", $1); $$ =effaceespace($1); num_lexeme=$1;} 
                       ;
 concatenation         : CSTSTRING PLUS expression
                       | CSTSTRING PLUS CSTSTRING
@@ -182,6 +237,7 @@ int main(void){
 	yyparse();
 
 	init_tab_lex();
+	//	initialisation_table_representation();
 	
 	for (int i=nb_lex;i<nb_tab;i++)
 	{ 
@@ -204,6 +260,9 @@ int main(void){
 		
 	/* int tst=existe_lex("char"); printf("existe: %d\n",tst); */
 	/* int tst2=existe_lex("blabla");printf("existe pas: %d\n",tst2); */
+
+      afficher_table_representation();
+
 
 	return 0;
 }
