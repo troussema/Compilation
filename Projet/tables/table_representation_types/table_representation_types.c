@@ -6,36 +6,48 @@
 
 
 
-
-
-int table_representation_types[TAILLE_MAX];
-/*Variables a donner*/
-int nombre_champ; /*les champs qui contient le types*/
-int num_lexical; /*numero dans la table lexico*/
-int num_declaration; /*numero de declaration de type dans 
-						la table des declaration*/
-int pointeur; /*Statique donc a nous de faire un pointeur */
-
-
-
-
-
-void initialisation_table(){
-
-        int i;
-	for ( i = 0; i < TAILLE_MAX; i++)
-	{
-		table_representation_types[i]=-1;/*les autre numeron
-								 on a besoin sauf les moins*/
-	}
+int inserer_table_representation(int typ)
+{
+	table_representation[indice_ajout] = typ;
+	indice_ajout++;
+	return indice_ajout-1;
 }
 
-void affichage_table(){
+void type_tableau()
+{
+	case1 = inserer_table_representation(-1);
 
-        int i;
-	
+}
+
+int borne_tableau(int typ)
+{
+  table_representation[case1] = typ;
+  return case1;
+}
+
+/*
+int borne_tableau(int typ)
+{representation[case1] = typ;
+  return case1;
+}
+*/
+
+/*
+int champs(int typ)
+{
+ representation[case2] = valeur;
+  return case2;
+}
+
+*/
+void afficher_table_representation()
+{
+
+
+    int i;
+	printf("\ntable de representation des types\n\n");
 	for ( i = 0 
-		 ;(i < TAILLE_MAX) && (table_representation_types[i]!=-1)
+		 ;(i < TAILLE_MAX) && (table_representation[i]!=-1)
 		 ;i++)
 		{
 			printf("|");
@@ -44,33 +56,39 @@ void affichage_table(){
 			printf("|");
 			/*les condition juste pour un affichage non decaler*/
 			
-			if(table_representation_types[i]<0)
-				printf(" %d     |\n",table_representation_types[i] );	
+			if(table_representation[i]<0)
+				printf(" %d     |\n",table_representation[i] );	
 			
 			else
-				printf(" %d      |\n",table_representation_types[i] );
+				printf(" %d      |\n",table_representation[i] );
 
 		}
-}	
+       printf("\n");
 
-/*Remplissage de la table de representation type par les donner*/
-
-void remplissage_table(int nombre_champ, int num_lexical, int num_declaration){
-
-      table_representation_types[pointeur]=nombre_champ;
-      pointeur++;
-
-      table_representation_types[pointeur]= num_lexical;
-      pointeur++;
-
-      table_representation_types[pointeur]= num_declaration;
-      pointeur++;
-
-      table_representation_types[pointeur]= MV;
-      pointeur++;
 }
 
 
-/*pour le teste*/
+
+void nbr_champs()
+{
+	case2 = inserer_table_representation(-1);
+}
+
+/*
+void nbr_champs()
+{
+	case1 = inserer_table_representation(0);
+}
+*/
+
+int champs(int typ)
+{
+  table_representation[case2] = typ;
+  return case2;
+}
+
+
+
+
 
 

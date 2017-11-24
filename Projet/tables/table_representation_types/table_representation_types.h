@@ -1,19 +1,15 @@
 #ifndef TABLE_REPRESENTATION_TYPES_H
 #define TABLE_REPRESENTATION_TYPES_H_
 
-
-
-#define TAILLE_MAX 1000 /* c'est gratuit */
-#define MV -2  /* Solo ;) */ 
-
-
-
-void initialisation_table();
-
-void affichage_table();
-
-void remplissage_table(int nombre_champ, int num_lexical, int num_declaration);
-
-
+    int indice_ajout = 0;
+int case1 = 0,case2 = 0;
+    #define TAILLE_MAX 20
+int table_representation[TAILLE_MAX] = {-1};	
+void afficher_table_representation();
+int inserer_table_representation(int valeur);
+void nbr_champs();
+int champs(int valeur);
+void type_tableau();
+int borne_tableau(int valeur);
 
 #endif /* TABLE_REPRESENTATION_TYPES_H_ */
