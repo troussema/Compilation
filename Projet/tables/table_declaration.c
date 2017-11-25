@@ -15,11 +15,11 @@
 #include "table_declaration.h"
 
 
-int compteur_table_debordement = OFFSET_DEBORDEMENT;
-declaration table_declaration[TAILLE_TABLE_DECLARATION];
-int compteur_description_type_entete = 0;
-int compteur_table_declaration_aux = 0;
-declaration_aux table_declaration_aux[TAILLE_TABLE_DECLARATION];
+/* int compteur_table_debordement = OFFSET_DEBORDEMENT; */
+/* declaration table_declaration[TAILLE_TABLE_DECLARATION]; */
+/* int compteur_description_type_entete = 0; */
+/* int compteur_table_declaration_aux = 0; */
+/* declaration_aux table_declaration_aux[TAILLE_TABLE_DECLARATION]; */
 
 
 /* =========== Insere un lexeme dans la table declaration auxiliaire ====== */
@@ -292,3 +292,84 @@ char* effaceespace(char* ch)
   return ch;
 }
 
+
+
+/************** TABLE DE REPRESENTATION DES TYPES ET DES ENTETE DE SOUS PROGRAMMES ************************/
+
+void init_table_representation()
+{
+  int i;
+  for (i = 0; i < TAILLE_TABLE_REPRESENTATION; i++)
+    table_representation[i] = 0;
+}
+
+void afficher_table_representation()
+{
+  int i;
+  printf("\n\nTABLE DE REPRESENTATION DES TYPES ET ENTETE DE SOUS PROGRAMMES\n");
+  printf("--------------------------------------------------------------\n");
+  for (i = 0; i < compteur_table_representation; i++)
+    {
+      printf("+ --- +\n");
+      printf("| %d  |\n", table_representation[i]);
+      printf("+ --- +\n");
+    }
+}
+
+void inserer_table_representation_aux (char valeur[LONGUEUR_LEXEME_MAX])
+{
+  strcpy(table_representation_aux[compteur_table_representation_aux++], valeur);
+}
+
+void inserer_table_representation (char valeur[LONGUEUR_LEXEME_MAX])
+{
+  int num_lex;
+  if (strcmp(valeur, "struct") == 0)
+    index_taille = compteur_table_representation++;
+  
+  else if (strcmp(valeur, "proc") == 0)
+    table_representation[compteur_table_representation++] = 0;
+
+  else if (strcmp(valeur, "array") == 0)
+    {
+      index_taille = compteur_table_representation++;
+      index_type = compteur_table_representation++;
+    }
+
+  else if (strcmp(valeur, "func") == 0)
+    table_representation[compteur_table_representation++] = 0;
+
+  else if (strcmp(valeur, "fin_struct") == 0)
+    {
+      table_representation[index_taille] = table_taille[compteur_table_taille++];
+    }
+  else if (strcmp(valeur, "fin_array") == 0)
+    {
+      table_representation[index_taille] = table_taille[compteur_table_taille++];
+      table_representation[index_type] = existe_lex(table_type[compteur_table_type++]);
+    }
+  else if (strcmp(valeur, "MV") == 0)
+    table_representation[compteur_table_representation++] = -2;
+  
+  else if ((num_lex = existe_lex(valeur)) >= 0)
+    table_representation[compteur_table_representation++] = num_lex;
+
+  else
+    table_representation[compteur_table_representation++] = atoi(valeur);
+}
+
+void inserer_table_taille()
+{
+  table_taille[compteur_table_taille_aux++] = taille;
+  taille = 0;
+}
+
+void inserer_table_type(char *type)
+{
+  strcpy(table_type[compteur_table_type_aux++], type);
+}
+
+void my_itoa(int value, char *arg)
+{
+  sprintf(arg,"%d", value);
+}
