@@ -27,9 +27,6 @@ begin
 	write("hello");
 end
 
-/* Test declaration d'un type array à 2 dimensions */
-type toto : array [1..5,1..10] of pipi;
-
 /* Test declaration fonction */
 func atsrexi (a:int, b:float) return int
 begin

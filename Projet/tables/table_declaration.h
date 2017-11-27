@@ -1,20 +1,8 @@
-/*-------------------------------------------------------------------------------
- *                                                                              *
- * Module contenant les fonctions pour gerer la table des declarations          *
- *                                                                              *
- * Auteur: SOLOFO RABONARIJAONA                                                 *
- *                                                                              *
- * Historique:                                                                  *
- *     - Creation le 03/11/17 par S.RABONARIJAONA                                                  *
- *                                                                              *
- *------------------------------------------------------------------------------*/
-
-
 #ifndef TABLE_DECLARATION_H
 
 #define TABLE_DECLARATION_H
-#define TAILLE_TABLE_DECLARATION 20
-#define OFFSET_DEBORDEMENT 10
+#define TAILLE_TABLE_DECLARATION 40
+#define OFFSET_DEBORDEMENT 20
 #define LONGUEUR_LEXEME_MAX 100
 #define FAUX 0
 #define VRAI 1
@@ -43,6 +31,13 @@ typedef struct {
   char lexeme[LONGUEUR_LEXEME_MAX];
   int nature;
 }declaration_aux;
+
+
+int compteur_table_debordement = OFFSET_DEBORDEMENT;
+declaration table_declaration[TAILLE_TABLE_DECLARATION];
+int compteur_description_type_entete = 0;
+int compteur_table_declaration_aux = 0;
+declaration_aux table_declaration_aux[TAILLE_TABLE_DECLARATION];
 
 
 /* déclaration des fonctions  */
@@ -87,5 +82,32 @@ void remplissage_tab_lex(char* ch,int n);
 int existe_lex(char* ch);
 char* effaceespace(char* ch);
 
+
+/**** TABLE DES REPRESENTATION DES TYPES ET ENTETE DE SOUS PROGRAMME ****/
+
+#define TAILLE_TABLE_REPRESENTATION 100
+int table_representation[TAILLE_TABLE_REPRESENTATION];
+char table_representation_aux[TAILLE_TABLE_REPRESENTATION][100];
+int compteur_table_representation_aux = 0;
+int compteur_table_representation = 0;
+int index_taille = 0;
+int table_taille[50];
+int compteur_table_taille = 0;
+int compteur_table_taille_aux = 0;
+int taille = 0;
+int index_type = 0;
+char table_type[50][100];
+int compteur_table_type = 0;
+int compteur_table_type_aux = 0;
+char sup[100];
+char inf[100];
+
+void inserer_table_representation_aux (char valeur[LONGUEUR_LEXEME_MAX]);
+void inserer_table_representation (char valeur[LONGUEUR_LEXEME_MAX]);
+void afficher_table_representation();
+void init_table_representation();
+void inserer_table_taille();
+void inserer_table_type(char *type);
+void my_itoa(int value, char *arg);
 
 #endif

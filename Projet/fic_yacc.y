@@ -8,15 +8,9 @@
 %token DEFINE 
 %{
 #include <stdio.h>
-#include "tables/table_declaration.h"
 #include "tables/table_declaration.c"
-#include "tables/table_representation_types/table_representation_types.c"  
-  /*icluuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuur
+#include "arbres/arbres.c"
 
-fffffffffffffffffffff
-
-
-*/
 #define TAILLE_MAX 1000 
 
 int main();
@@ -32,7 +26,7 @@ extern int num_colone;
  int champs_tableau=0;
  int nombre_parametres=0;
 
- 
+ arbre aa;
  
  
  
@@ -41,97 +35,64 @@ extern int num_colone;
 
 %%
 programme            : liste_def PROG corps
-                     | PROG corps
+                     | PROG corps {aa = $2;}
                      ;
 
-liste_def	     : DEFINE  
-                     | liste_def DEFINE
+liste_def	     : DEFINE  {$$ = $1;}
+                     | liste_def DEFINE {$$ = $2;}
 		     ;
 		     ;
-corps                : liste_instructions
-	             | liste_declarations liste_instructions 
+corps                : liste_instructions {$$ = $1;}
+	             | liste_declarations liste_instructions  {$$ = $2;}
 	             ;
 liste_declarations   : declaration
 		     | liste_declarations declaration
                      ;
-liste_instructions   : BEGIN2 suite_liste_inst END
+liste_instructions   : BEGIN2 suite_liste_inst END {$$ =concat_pere_fils(creer_noeud(AA_LISTE,-1,-1),$2);}
 		     ;
-suite_liste_inst     : instruction
+suite_liste_inst     : instruction {$$=$1;}
 		     | liste_declarations suite_liste_inst
-                     | suite_liste_inst instruction 
+                     | suite_liste_inst instruction {$$=concat_pere_frer(concat_pere_fils(creer_noeud(AA_LISTE,-1,-1),$1),$2);}
 		     ;
 declaration          : declaration_type 
 	             | declaration_variable PVIRG
 	             | declaration_procedure 
 	             | declaration_fonction 
 	             ;
-declaration_type     : TYPE variable DP STRUCT {		
-                            champs_structure = 0;
-                            nbr_champs();
-                          } liste_champs {
-                            champs(champs_structure);
-			                      
-                            
-                            
-                          }  ENDSTRUCT  {printf("** %s", $2); inserer_aux($2, TYPE_STRUCT);
-}
-                     | TYPE variable DP ARRAY {		
-                            champs_tableau = 0;
-			                      type_tableau();
-                            nbr_champs();
+declaration_type     : TYPE variable DP STRUCT { inserer_table_representation_aux("struct"); } liste_champs ENDSTRUCT  { printf("** %s", $2); inserer_aux($2, TYPE_STRUCT); inserer_table_taille(); inserer_table_representation_aux("fin_struct");}
 
-                          }  dimension {
-                            champs(champs_tableau);
-			      
-                          }  OF nom_type {
-			                   
-                          borne_tableau(champs_tableau);
-                          
-                         
-                          
-                        }  PVIRG  {printf("** %s", $2); inserer_aux($2, TYPE_ARRAY);}
+| TYPE variable DP ARRAY { inserer_table_representation_aux("array"); } dimension  OF nom_type  PVIRG  {printf("** %s", $2); inserer_aux($2, TYPE_ARRAY); inserer_table_type($8); inserer_table_taille(); inserer_table_representation_aux("fin_array"); }
 		     ;
 dimension             : CO liste_dimensions CF
 		      ;
-liste_dimensions      : une_dimension {champs_tableau++;}
-		      | liste_dimensions VIRG une_dimension {champs_tableau++;}
+liste_dimensions      : une_dimension
+		      | liste_dimensions VIRG une_dimension
 		      ;
-une_dimension         : CSTINT PP CSTINT {
-                         
-                            inserer_table_representation($1); //CSTINT
-                            inserer_table_representation($3); //CSTINT
-                          }
+une_dimension         : CSTINT PP CSTINT {my_itoa($1, inf); my_itoa($3, sup); inserer_table_representation_aux(inf); inserer_table_representation_aux(sup); taille++;}
 		      ;
-liste_champs          : un_champ  PVIRG {champs_structure++;}
-| liste_champs un_champ PVIRG {champs_structure++;}
+liste_champs          : un_champ  PVIRG {inserer_table_representation_aux("MV");}
+                      | liste_champs un_champ PVIRG {inserer_table_representation_aux("MV");} 
 		      ;
-un_champ              : variable DP nom_type {
-                            
-                            inserer_table_representation($1);//variable
-                            inserer_table_representation($3);//nom_type
-//Machine virtuel                            
-inserer_table_representation(-2);//Machine virtuel
-                           
-                          }
+un_champ              : variable DP nom_type {inserer_table_representation_aux($1); inserer_table_representation_aux($3); taille++; }
 		      ;
-nom_type              : type_simple
-		      | variable
+nom_type              : type_simple  {$$ = $1;}
+		      | variable {$$ = $1;}
 		      ;
-type_simple           : INT  {$$=0;}  
-	              | FLOAT  {$$=1;}
-	              | BOOL  {$$=2;}
-		      | CHAR  {$$=3;}
-		      | STRING CO CSTINT CF  {$$=4;}
+type_simple           : INT   {$$ = "int";} {$$=0;}  
+	              | FLOAT   {$$ = "float";}  {$$=1;}
+	              | BOOL   {$$ = "boolean";} {$$=2;}
+		      | CHAR   {$$ = "char";} {$$=3;}
+		      | STRING CO CSTINT CF   {$$ = "string";} {$$=4;}
 		      ;
 declaration_variable  : VAR variable DP nom_type   { printf("** %s",$2);inserer_aux($2, TYPE_VAR);
 
 		     }
                       | VAR variable DP nom_type AFF const {printf("** %s", $2);inserer_aux($2, TYPE_VAR);}
 		      ;
-declaration_procedure : PROCEDURE variable liste_parametres corps {printf("** %s", $2); inserer_aux($2, TYPE_PROC);}
+declaration_procedure : PROCEDURE variable liste_parametres corps {printf("** %s", $2); inserer_aux($2, TYPE_PROC); inserer_table_representation_aux("proc");}
 		      ;
 declaration_fonction  : FUNCTION variable liste_parametres RETURN type_simple
-                            corps {printf("** %s", $2); inserer_aux($2, TYPE_FUNC);}
+corps {printf("** %s", $2); inserer_aux($2, TYPE_FUNC); inserer_table_representation_aux("func");}
 		      ;
 liste_parametres      : 
 		      | PO liste_param PF
@@ -184,11 +145,11 @@ condition             : IF PO expression PF
                       ;
 tant_que              : WHILE PO expression PF DO liste_instructions
                       ;
-affectation           : variable egal expression
+affectation           : variable egal expression {$$=concat_pere_fils(creer_noeud(AA_AFF,-1,-1), concat_pere_frer($1,$3));}
 		      ;
 egal                  : AFF
                       ;
-variable              : IDF {tab_l[nb_tab]=effaceespace($1);nb_tab++; printf("( %s )", $1); $$ =effaceespace($1); num_lexeme=$1;} 
+variable              : IDF {tab_l[nb_tab]=effaceespace($1);nb_tab++; printf("( %s )", $1); $$ =effaceespace($1); num_lexeme=$1;} {effaceespace($1); $$=creer_noeud(AA_IDF,$1,-1);}
                       ;
 concatenation         : CSTSTRING PLUS expression
                       | CSTSTRING PLUS CSTSTRING
@@ -199,8 +160,8 @@ booleen               : TRUE
 expression            : e_test
                       | concatenation
                       ;
-e_test                : e
-                      | e_test EQUAL e
+e_test                : e {$$=$1;}
+                      | e_test EQUAL e 
                       | e_test NEQUAL e
                       | e_test LESS e
                       | e_test LESSEQ e
@@ -209,28 +170,28 @@ e_test                : e
                       | e_test OR e
                       | e_test AND e
                       ; 
-e                     : e1
-                      | e PLUS e1 
-                      | e MINUS e1 
+e                     : e1 {$$=$1;}
+                      | e PLUS e1  {$$=concat_pere_fils(creer_noeud(AA_PLUS,-1,-1),concat_pere_frer($1,$3));}
+                      | e MINUS e1 {$$=concat_pere_fils(creer_noeud(AA_MINUS,-1,-1),concat_pere_frer($1,$3));}
                       ;
-e1                    : e2
+e1                    : e2 {$$=$1;}
                       | e1 MULT e2 
                       | e1 DIV e2 
                       | e1 MOD e2
                       ;
-e2                    : PO e PF 
-                      | CSTINT 
-                      | variable
+e2                    : PO e PF {$$ = $2;}
+                      | CSTINT {$$=creer_noeud(AA_INT,$1,-1);}
+                      | variable {$$ = $1;}
 		      | appel
-		      | CSTFLOAT
-                      | booleen
+		      | CSTFLOAT {$$=creer_noeud(AA_FLOAT,$1,-1);}
+                      | booleen {$$=creer_noeud(AA_BOOL,$1,-1);}
                       ;
 
-const: 	            CSTINT
-		    |CSTFLOAT
-		    |CSTCHAR
-		    |CSTSTRING
-		    |booleen 	
+const: 	            CSTINT {$$=creer_noeud(AA_INT,$1,-1);}
+		    |CSTFLOAT{$$=creer_noeud(AA_FLOAT,$1,-1);}
+		    |CSTCHAR {$$=creer_noeud(AA_CHAR,$1,-1);}
+		    |CSTSTRING {$$=creer_noeud(AA_STRING,$1,-1);}
+		    |booleen 	{$$=creer_noeud(AA_BOOL,$1,-1);}
 		    ;
 %%
 int main(void){
@@ -255,14 +216,18 @@ int main(void){
 	
 	affichage_tab_lex();
 	afficher_table();	/* afficher table declaration */
+
+	init_table_representation();
+
+	for (int i = 0; i < compteur_table_representation_aux; i++)
+	  inserer_table_representation(table_representation_aux[i]);
+
+	afficher_table_representation();
+
 	
-	//exemple pour solo
-		
-	/* int tst=existe_lex("char"); printf("existe: %d\n",tst); */
-	/* int tst2=existe_lex("blabla");printf("existe pas: %d\n",tst2); */
+//affichage arbre: 
 
-      afficher_table_representation();
-
+affichage(aa,1);
 
 	return 0;
 }

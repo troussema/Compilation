@@ -45,48 +45,49 @@ typedef struct arb  * arbre;
 #define AA_THEN 14
 #define AA_ELSE 15
 #define AA_ELSEIF 16
-#define AA_WHILE 16
-#define AA_DO 17
-#define AA_FOR 18
+#define AA_WHILE 17
+#define AA_DO 18
+#define AA_FOR 19
 
-#define AA_AFF 19
-
-
-#define AA_CSTINT 20
-#define AA_CSTFLOAT 21
-#define AA_CSTBOOL 22
-#define AA_CSTCHAR 23
-#define AA_CSTSTRING 24
-
-#define AA_FUNCTION 25
-#define AA_PROCEDURE 26
-#define AA_RETURN 27
+#define AA_AFF 20
 
 
+#define AA_CSTINT 21
+#define AA_CSTFLOAT 22
+#define AA_CSTBOOL 23
+#define AA_CSTCHAR 24
+#define AA_CSTSTRING 25
 
-#define AA_WRITE 28
-#define AA_READ 29
+#define AA_FUNCTION 26
+#define AA_PROCEDURE 27
+#define AA_RETURN 28
 
-#define AA_EMPTY 30
 
-#define AA_IDF 31
 
-#define AA_ARRAY 32
+#define AA_WRITE 29
+#define AA_READ 30
 
-#define AA_LISTE 33
+#define AA_EMPTY 31
 
-#define AA_DEFINE 34
+#define AA_IDF 32
 
-#define AA_STRUCT 35
+#define AA_ARRAY 33
 
+#define AA_LISTE 34
+
+#define AA_DEFINE 35
+
+#define AA_STRUCT 36
 
 
 
 
 arbre creer_noeud(int nat,int numl,int numd);
-void concat_pere_frer(arbre a1, arbre a2);
-void concat_pere_fils(arbre a1, arbre a2);
-void affichage_test(arbre a);
+arbre concat_pere_frer(arbre a1, arbre a2);
+arbre concat_pere_fils(arbre a1, arbre a2);
+void padding ( char ch, int n );
+void affichage( arbre a, int niveau );
+
 arbre creer_node_cstint(int numl, int numd);
 arbre creer_node_cstfloat(int numl, int numd);
 arbre creer_node_cstbool(int numl, int numd);
