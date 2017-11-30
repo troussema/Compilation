@@ -47,6 +47,18 @@ rcxahs=2;
 
 write("%d", shracx);
 
+if ( a>b && (c/2)==0) then
+begin
+
+
+
+// test 7 
+affichage();
+somme(a,b);
+read("%s",ch2);
+write("%s %s %d", ch,ch2,age);
+
+end
 
 
 

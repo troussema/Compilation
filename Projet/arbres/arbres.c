@@ -163,6 +163,8 @@ if (i==34){ nat="AA_LISTE";}
 if (i==35){ nat="AA_DEFINE";}
 if (i==36){ nat="AA_STRUCT";}
 if (i==37){ nat="AA_CALL";}
+if (i==-111){nat=" () ";}
+if (i==38){nat="AA_CONCAT";}
 
 
 
@@ -197,6 +199,7 @@ char *nat=rech_nature(a->nature);
 {
    printf ( "(%s)|%d|%d|{%s}\n", nat,a->numlex,a->numdecl,a->lexeme );
 }
+
 else {
 printf ( "(%s)|%d|%d\n", nat,a->numlex,a->numdecl );
 }

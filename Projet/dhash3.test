@@ -1,0 +1,47 @@
+/* test des defines */
+
+#define PI 3.1
+#define RES 0
+#define RES2 0
+#define AUTRE 5
+
+
+prog
+
+var xyz:int;
+/*
+func atsrexi (aa:int, bb:float) return int
+begin
+aa=2;
+return aa;
+end
+*/
+
+begin
+/*
+a = "sqfdf " + "sqfdsfdf"; 
+
+x = 5*6;
+
+
+if (a>b || (x/y)==TRUE )then
+begin
+y=6.3/2.2;
+y=5^2;
+empty;
+end
+
+
+
+write("%d", shracx);
+read("%s",ch2);
+*/
+//write("%s %s %d", ch,ch2,age);
+astrexi(5,5);
+y=12;
+end
+
+
+
+
+

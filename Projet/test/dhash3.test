@@ -24,18 +24,6 @@ write("%d", shracx);
 
 
 
-if ( a>b && (c/2)==0) then
-begin
-
-
-
-// test 7 
-
-
-
-write("%s", ch);
-
-end
 
 
 end

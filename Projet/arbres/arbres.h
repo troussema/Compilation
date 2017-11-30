@@ -82,6 +82,14 @@ typedef struct arb  * arbre;
 
 #define AA_CALL 37
 
+#define AA_CONCAT 38
+
+
+#define AA_TRUE 39
+
+
+#define AA_FALSE 40
+
 
 
 
