@@ -32,12 +32,20 @@ typedef struct {
   int nature;
 }declaration_aux;
 
+typedef struct{
+  int valeur;
+  char lexeme[LONGUEUR_LEXEME_MAX];
+}description;
+
 
 int compteur_table_debordement = OFFSET_DEBORDEMENT;
 declaration table_declaration[TAILLE_TABLE_DECLARATION];
 int compteur_description_type_entete = 0;
 int compteur_table_declaration_aux = 0;
 declaration_aux table_declaration_aux[TAILLE_TABLE_DECLARATION];
+description table_description[TAILLE_TABLE_DECLARATION];
+int compteur_table_description = 0;
+int description = 0;
 
 
 /* déclaration des fonctions  */
@@ -52,6 +60,8 @@ void modifier_suivant(int index, int new_suivant);
 void afficher_table();
 /* =========== Initialise la table (insere les types simples) ======== */
 void init_table();
+void inserer_table_declaration (int type, char lex[LONGUEUR_LEXEME_MAX]);
+
 
 
 /* --------------------  TABLE LEXICOGRAPHIQUE----------------------------- */

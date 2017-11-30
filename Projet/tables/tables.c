@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "table_declaration.h"
+#include "tables.h"
 
 
 /* int compteur_table_debordement = OFFSET_DEBORDEMENT; */
@@ -109,24 +109,59 @@ void afficher_table()
   int i;
   fprintf(stdout, "TABLE DES DECLARATIONS - ZONE NORMALE\n");
   fprintf(stdout, "--------------------------------------\n");
-  fprintf(stdout, "\n| Index | Nature | Suivant | Region | Description | Execution |\n");
-  fprintf(stdout, "\n|-------------------------------------------------------------|\n");
+  fprintf(stdout, "\n| Index | Nature | Suivant | Region | Description | Execution | Lexeme |\n");
+  fprintf(stdout, "\n|----------------------------------------------------------------------|\n");
   for (i = 0; i < OFFSET_DEBORDEMENT; i++)
   {
-    fprintf(stdout, "| %d    | %d     | %d      | %d     | %d          | %d        |\n", table_declaration[i].index, table_declaration[i].nature, table_declaration[i].suivant, table_declaration[i].region, table_declaration[i].description, table_declaration[i].execution);
-    fprintf(stdout, "|-------------------------------------------------------------|\n");
+    fprintf(stdout, "| %d    | %d     | %d      | %d     | %d          | %d        | %s     |\n", table_declaration[i].index, table_declaration[i].nature, table_declaration[i].suivant, table_declaration[i].region, table_declaration[i].description, table_declaration[i].execution, table_declaration[i].lexeme);
+    fprintf(stdout, "|----------------------------------------------------------------------|\n");
   }
 
   fprintf(stdout, "\n\nTABLE DES DECLARATIONS - ZONE DE DEBORDEMENT\n");
   fprintf(stdout, "--------------------------------------\n");
-  fprintf(stdout, "\n| Index | Nature | Suivant | Region | Description | Execution |\n");
-  fprintf(stdout, "\n|-------------------------------------------------------------|\n");
+  fprintf(stdout, "\n| Index | Nature | Suivant | Region | Description | Execution | Lexeme |\n");
+  fprintf(stdout, "\n|----------------------------------------------------------------------|\n");
   for (; i < TAILLE_TABLE_DECLARATION; i++)
   {
-    fprintf(stdout, "| %d    | %d     | %d      | %d     | %d          | %d        |\n", table_declaration[i].index, table_declaration[i].nature, table_declaration[i].suivant, table_declaration[i].region, table_declaration[i].description, table_declaration[i].execution);
-    fprintf(stdout, "|-------------------------------------------------------------|\n");
+    fprintf(stdout, "| %d    | %d     | %d      | %d     | %d          | %d        | %s     |\n", table_declaration[i].index, table_declaration[i].nature, table_declaration[i].suivant, table_declaration[i].region, table_declaration[i].description, table_declaration[i].execution, table_declaration[i].lexeme);
+    fprintf(stdout, "|----------------------------------------------------------------------|\n");
   }
 }
+
+/* ============ table description =============== */
+
+/* void inserer_table_declaration (int type, char lex[LONGUEUR_LEXEME_MAX]) */
+/* { */
+/*   switch (type) */
+/*     { */
+/*     case TYPE_STRUCT: */
+/*       table_description[compteur_table_description].lexeme = NULL; */
+/*       table_description[compteur_table_description++].valeur = description; */
+/*       description += taille * 3 + 1; */
+/*       break; */
+/*     case TYPE_ARRAY: */
+/*       table_description[compteur_table_description].lexeme = NULL; */
+/*       table_description[compteur_table_description++].valeur = description; */
+/*       description += taille * 2 + 2; */
+/*       break; */
+/*     case TYPE_VAR: */
+/*       table_description[compteur_table_description].valeur = NULL */
+/*       strcpy(table_description[compteur_table_description++].lexeme, lex); */
+/*       break; */
+/*     case TYPE_PROC: */
+/*       table_description[compteur_table_description].lexeme = NULL; */
+/*       table_description[compteur_table_description++].valeur = description++; */
+/*       break; */
+/*     case TYPE_FUNC: */
+/*       table_description[compteur_table_description].lexeme = NULL; */
+/*       table_description[compteur_table_description++].valeur = description++; */
+/*       break; */
+/*     default: */
+/*       break; */
+/*     } */
+/* } */
+
+
 
 
 /* ----------------------------- TABLE LEXICOGRAPHIQUE&HASH ----------------- 

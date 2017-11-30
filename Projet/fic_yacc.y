@@ -8,7 +8,7 @@
 %token DEFINE 
 %{
 #include <stdio.h>
-#include "tables/table_declaration.c"
+#include "tables/tables.c"
 #include "arbres/arbres.c"
 
 #define TAILLE_MAX 1000 
@@ -35,24 +35,24 @@ extern int num_colone;
 
 %%
 programme            : liste_def PROG corps
-                     | PROG corps {aa = $2;}
+                     | PROG corps 
                      ;
 
-liste_def	     : DEFINE  {$$ = $1;}
-                     | liste_def DEFINE {$$ = $2;}
+liste_def	     : DEFINE 
+                     | liste_def DEFINE 
 		     ;
 		     ;
-corps                : liste_instructions {$$ = $1;}
-	             | liste_declarations liste_instructions  {$$ = $2;}
+corps                : liste_instructions 
+	             | liste_declarations liste_instructions  
 	             ;
 liste_declarations   : declaration
 		     | liste_declarations declaration
                      ;
-liste_instructions   : BEGIN2 suite_liste_inst END {$$ =concat_pere_fils(creer_noeud(AA_LISTE,-1,-1),$2);}
+liste_instructions   : BEGIN2 suite_liste_inst END {/* $$ =concat_pere_fils(creer_noeud(AA_LISTE,-1,-1),$2); */}
 		     ;
-suite_liste_inst     : instruction {$$=$1;}
+suite_liste_inst     : instruction 
 		     | liste_declarations suite_liste_inst
-                     | suite_liste_inst instruction {$$=concat_pere_frer(concat_pere_fils(creer_noeud(AA_LISTE,-1,-1),$1),$2);}
+                     | suite_liste_inst instruction {/* $$=concat_pere_frer(concat_pere_fils(creer_noeud(AA_LISTE,-1,-1),$1),$2); */}
 		     ;
 declaration          : declaration_type 
 	             | declaration_variable PVIRG
@@ -78,15 +78,13 @@ un_champ              : variable DP nom_type {inserer_table_representation_aux($
 nom_type              : type_simple  {$$ = $1;}
 		      | variable {$$ = $1;}
 		      ;
-type_simple           : INT   {$$ = "int";} {$$=0;}  
-	              | FLOAT   {$$ = "float";}  {$$=1;}
-	              | BOOL   {$$ = "boolean";} {$$=2;}
-		      | CHAR   {$$ = "char";} {$$=3;}
-		      | STRING CO CSTINT CF   {$$ = "string";} {$$=4;}
+type_simple           : INT   {$$ = "int";}
+	              | FLOAT   {$$ = "float";}
+	              | BOOL   {$$ = "boolean";}
+		      | CHAR   {$$ = "char";}
+		      | STRING CO CSTINT CF   {$$ = "string";}
 		      ;
-declaration_variable  : VAR variable DP nom_type   { printf("** %s",$2);inserer_aux($2, TYPE_VAR);
-
-		     }
+declaration_variable  : VAR variable DP nom_type   { printf("** %s",$2);inserer_aux($2, TYPE_VAR);}
                       | VAR variable DP nom_type AFF const {printf("** %s", $2);inserer_aux($2, TYPE_VAR);}
 		      ;
 declaration_procedure : PROCEDURE variable liste_parametres corps {printf("** %s", $2); inserer_aux($2, TYPE_PROC); inserer_table_representation_aux("proc");}
@@ -145,11 +143,11 @@ condition             : IF PO expression PF
                       ;
 tant_que              : WHILE PO expression PF DO liste_instructions
                       ;
-affectation           : variable egal expression {$$=concat_pere_fils(creer_noeud(AA_AFF,-1,-1), concat_pere_frer($1,$3));}
+affectation           : variable egal expression {/* $$=concat_pere_fils(creer_noeud(AA_AFF,-1,-1), concat_pere_frer($1,$3)); */}
 		      ;
 egal                  : AFF
                       ;
-variable              : IDF {tab_l[nb_tab]=effaceespace($1);nb_tab++; printf("( %s )", $1); $$ =effaceespace($1); num_lexeme=$1;} {effaceespace($1); $$=creer_noeud(AA_IDF,$1,-1);}
+variable              : IDF {tab_l[nb_tab]=effaceespace($1);nb_tab++; printf("( %s )", $1); $$ =effaceespace($1); num_lexeme=$1;} {effaceespace($1);}
                       ;
 concatenation         : CSTSTRING PLUS expression
                       | CSTSTRING PLUS CSTSTRING
@@ -160,7 +158,7 @@ booleen               : TRUE
 expression            : e_test
                       | concatenation
                       ;
-e_test                : e {$$=$1;}
+e_test                : e 
                       | e_test EQUAL e 
                       | e_test NEQUAL e
                       | e_test LESS e
@@ -170,28 +168,28 @@ e_test                : e {$$=$1;}
                       | e_test OR e
                       | e_test AND e
                       ; 
-e                     : e1 {$$=$1;}
-                      | e PLUS e1  {$$=concat_pere_fils(creer_noeud(AA_PLUS,-1,-1),concat_pere_frer($1,$3));}
-                      | e MINUS e1 {$$=concat_pere_fils(creer_noeud(AA_MINUS,-1,-1),concat_pere_frer($1,$3));}
+e                     : e1 
+                      | e PLUS e1  {/* $$=concat_pere_fils(creer_noeud(AA_PLUS,-1,-1),concat_pere_frer($1,$3)); */}
+                      | e MINUS e1 {/* $$=concat_pere_fils(creer_noeud(AA_MINUS,-1,-1),concat_pere_frer($1,$3)); */}
                       ;
 e1                    : e2 {$$=$1;}
                       | e1 MULT e2 
                       | e1 DIV e2 
                       | e1 MOD e2
                       ;
-e2                    : PO e PF {$$ = $2;}
-                      | CSTINT {$$=creer_noeud(AA_INT,$1,-1);}
-                      | variable {$$ = $1;}
+e2                    : PO e PF 
+                      | CSTINT {/* $$=creer_noeud(AA_INT,$1,-1); */}
+                      | variable 
 		      | appel
-		      | CSTFLOAT {$$=creer_noeud(AA_FLOAT,$1,-1);}
-                      | booleen {$$=creer_noeud(AA_BOOL,$1,-1);}
+		      | CSTFLOAT {/* $$=creer_noeud(AA_FLOAT,$1,-1); */}
+                      | booleen {/* $$=creer_noeud(AA_BOOL,$1,-1); */}
                       ;
 
-const: 	            CSTINT {$$=creer_noeud(AA_INT,$1,-1);}
-		    |CSTFLOAT{$$=creer_noeud(AA_FLOAT,$1,-1);}
-		    |CSTCHAR {$$=creer_noeud(AA_CHAR,$1,-1);}
-		    |CSTSTRING {$$=creer_noeud(AA_STRING,$1,-1);}
-		    |booleen 	{$$=creer_noeud(AA_BOOL,$1,-1);}
+const: 	            CSTINT {/* $$=creer_noeud(AA_INT,$1,-1); */}
+		    |CSTFLOAT {/*$$=creer_noeud(AA_FLOAT,$1,-1); */}
+		    |CSTCHAR {/* $$=creer_noeud(AA_CHAR,$1,-1); */}
+		    |CSTSTRING {/* $$=creer_noeud(AA_STRING,$1,-1); */}
+		    |booleen 	{/* $$=creer_noeud(AA_BOOL,$1,-1); */}
 		    ;
 %%
 int main(void){
@@ -225,9 +223,9 @@ int main(void){
 	afficher_table_representation();
 
 	
-//affichage arbre: 
+	//affichage arbre: 
 
-affichage(aa,1);
+	//affichage(aa,1);
 
 	return 0;
 }
