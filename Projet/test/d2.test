@@ -5,7 +5,7 @@ begin
 test 2
 */
 c = c * a;
-b = appel (  a ,  b );
+//b = appel (  a ,  b );
 appel2 () ;
 
 //commentaire sur une seule ligne

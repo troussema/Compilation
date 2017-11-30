@@ -10,6 +10,7 @@ typedef struct arb
 int nature;
 int numlex;
 int numdecl;
+char *lexeme;
 struct arb * frer;
 struct arb * fils;
 
@@ -79,10 +80,12 @@ typedef struct arb  * arbre;
 
 #define AA_STRUCT 36
 
+#define AA_CALL 37
 
 
 
-arbre creer_noeud(int nat,int numl,int numd);
+
+arbre creer_noeud(int nat,int numl,int numd,char *lex);
 arbre concat_pere_frer(arbre a1, arbre a2);
 arbre concat_pere_fils(arbre a1, arbre a2);
 void padding ( char ch, int n );

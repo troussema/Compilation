@@ -28,31 +28,31 @@ extern int num_colone;
 
  arbre aa;
  
- 
+ arbre arbreidf;
  
 
 %}
 
 %%
-programme            : liste_def PROG corps
-                     | PROG corps 
+programme            : liste_def PROG corps {aa=$3;} 
+                     | PROG corps  {aa = $2;}
                      ;
 
-liste_def	     : DEFINE 
-                     | liste_def DEFINE 
+liste_def	     : DEFINE  
+                     | liste_def DEFINE  
 		     ;
 		     ;
-corps                : liste_instructions 
-	             | liste_declarations liste_instructions  
+corps                : liste_instructions {$$ = $1;} 
+	             | liste_declarations liste_instructions   {$$ = $2;}
 	             ;
 liste_declarations   : declaration
 		     | liste_declarations declaration
                      ;
-liste_instructions   : BEGIN2 suite_liste_inst END {/* $$ =concat_pere_fils(creer_noeud(AA_LISTE,-1,-1),$2); */}
+liste_instructions   : BEGIN2 suite_liste_inst END { $$ =concat_pere_fils(creer_noeud(AA_LISTE,-1,-1,"AA_LISTE"),$2); }
 		     ;
 suite_liste_inst     : instruction 
 		     | liste_declarations suite_liste_inst
-                     | suite_liste_inst instruction {/* $$=concat_pere_frer(concat_pere_fils(creer_noeud(AA_LISTE,-1,-1),$1),$2); */}
+                     | suite_liste_inst instruction { $$=concat_pere_frer(concat_pere_fils(creer_noeud(AA_LISTE,-1,-1,"AA_LISTE"),$1),$2);}
 		     ;
 declaration          : declaration_type 
 	             | declaration_variable PVIRG
@@ -113,9 +113,9 @@ instruction           : affectation PVIRG
 resultat_retourne     :
 		      | expression
 		      ;	
-appel                 : variable liste_arguments
+appel                 : variable liste_arguments {$$=creer_noeud(AA_CALL,-1,-1,-1);}
 		      ;
-ecrire                : WRITE PO CSTSTRING liste_args_ecrire PF
+ecrire                : WRITE PO CSTSTRING liste_args_ecrire PF {$$=creer_noeud(AA_WRITE,-1,-1,-1);}
                       ;
 liste_args_ecrire     :
                       | VIRG un_arg
@@ -143,11 +143,11 @@ condition             : IF PO expression PF
                       ;
 tant_que              : WHILE PO expression PF DO liste_instructions
                       ;
-affectation           : variable egal expression {/* $$=concat_pere_fils(creer_noeud(AA_AFF,-1,-1), concat_pere_frer($1,$3)); */}
+affectation           : variable egal expression { $$=concat_pere_fils(creer_noeud(AA_AFF,-1,-1,"AA_AFF"), concat_pere_frer(arbreidf,$3)); }
 		      ;
 egal                  : AFF
                       ;
-variable              : IDF {tab_l[nb_tab]=effaceespace($1);nb_tab++; printf("( %s )", $1); $$ =effaceespace($1); num_lexeme=$1;} {effaceespace($1);}
+variable              : IDF {tab_l[nb_tab]=effaceespace($1);nb_tab++; printf("( %s )", $1); $$ =effaceespace($1); num_lexeme=$1;} { arbreidf=creer_noeud(AA_IDF,$1,-1,$1);}
                       ;
 concatenation         : CSTSTRING PLUS expression
                       | CSTSTRING PLUS CSTSTRING
@@ -169,8 +169,8 @@ e_test                : e
                       | e_test AND e
                       ; 
 e                     : e1 
-                      | e PLUS e1  {/* $$=concat_pere_fils(creer_noeud(AA_PLUS,-1,-1),concat_pere_frer($1,$3)); */}
-                      | e MINUS e1 {/* $$=concat_pere_fils(creer_noeud(AA_MINUS,-1,-1),concat_pere_frer($1,$3)); */}
+                      | e PLUS e1  {$$=concat_pere_fils(creer_noeud(AA_PLUS,-1,-1,"AA_PLUS"),concat_pere_frer($1,$3)); }
+                      | e MINUS e1 { $$=concat_pere_fils(creer_noeud(AA_MINUS,-1,-1,"AA_MINUS"),concat_pere_frer($1,$3)); }
                       ;
 e1                    : e2 {$$=$1;}
                       | e1 MULT e2 
@@ -178,18 +178,18 @@ e1                    : e2 {$$=$1;}
                       | e1 MOD e2
                       ;
 e2                    : PO e PF 
-                      | CSTINT {/* $$=creer_noeud(AA_INT,$1,-1); */}
-                      | variable 
-		      | appel
-		      | CSTFLOAT {/* $$=creer_noeud(AA_FLOAT,$1,-1); */}
-                      | booleen {/* $$=creer_noeud(AA_BOOL,$1,-1); */}
+                      | CSTINT { $$=creer_noeud(AA_INT,$1,-1,"int"); }
+                      | variable {$$=arbreidf;}
+		      | appel {$$=$1;}
+		      | CSTFLOAT { $$=creer_noeud(AA_FLOAT,$1,-1,"float"); }
+                      | booleen {$$=creer_noeud(AA_BOOL,$1,-1,"bool"); }
                       ;
 
-const: 	            CSTINT {/* $$=creer_noeud(AA_INT,$1,-1); */}
-		    |CSTFLOAT {/*$$=creer_noeud(AA_FLOAT,$1,-1); */}
-		    |CSTCHAR {/* $$=creer_noeud(AA_CHAR,$1,-1); */}
-		    |CSTSTRING {/* $$=creer_noeud(AA_STRING,$1,-1); */}
-		    |booleen 	{/* $$=creer_noeud(AA_BOOL,$1,-1); */}
+const: 	            CSTINT { $$=creer_noeud(AA_INT,$1,-1,"int"); }
+		    |CSTFLOAT {$$=creer_noeud(AA_FLOAT,$1,-1,"float"); }
+		    |CSTCHAR { $$=creer_noeud(AA_CHAR,$1,-1,"char"); }
+		    |CSTSTRING { $$=creer_noeud(AA_STRING,$1,-1,"string"); }
+		    |booleen 	{ $$=creer_noeud(AA_BOOL,$1,-1,"bool"); }
 		    ;
 %%
 int main(void){
@@ -225,7 +225,7 @@ int main(void){
 	
 	//affichage arbre: 
 
-	//affichage(aa,1);
+	affichage(aa,1);
 
 	return 0;
 }

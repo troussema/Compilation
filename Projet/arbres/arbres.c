@@ -17,13 +17,14 @@
 
 
 
-arbre creer_noeud(int nat,int numl,int numd)
+arbre creer_noeud(int nat,int numl,int numd,char *lex)
 {
 
 arbre a=(arbre )malloc(sizeof(arb));
   a->nature=nat;
   a->numlex=numl;
   a->numdecl=numd;
+  a->lexeme=lex;
   a->frer=NULL;
   a->fils=NULL;
  
@@ -58,24 +59,24 @@ return a1;
 } 
 
 arbre creer_node_cstint(int numl, int numd){
-	arbre aa=creer_noeud(AA_CSTINT,numl,numd);
+	arbre aa=creer_noeud(AA_CSTINT,numl,numd,"csti");
 	  return aa;
 	}
 
 arbre creer_node_cstfloat(int numl, int numd){
-	arbre aa=creer_noeud(AA_CSTFLOAT,numl,numd);
+	arbre aa=creer_noeud(AA_CSTFLOAT,numl,numd,"cstf");
 	  return aa;
 	}
 arbre creer_node_cstbool(int numl, int numd){
-	arbre aa=creer_noeud(AA_CSTBOOL,numl,numd);
+	arbre aa=creer_noeud(AA_CSTBOOL,numl,numd,"cstb");
 	  return aa;
 	}
 arbre creer_node_cstchar(int numl, int numd){
-	arbre aa=creer_noeud(AA_CSTCHAR,numl,numd);
+	arbre aa=creer_noeud(AA_CSTCHAR,numl,numd,"cstc");
 	  return aa;
 	}
 arbre creer_node_cststring(int numl, int numd){
-	arbre aa=creer_noeud(AA_CSTSTRING,numl,numd);
+	arbre aa=creer_noeud(AA_CSTSTRING,numl,numd,"cstc");
 	  return aa;
 	}
 
@@ -161,6 +162,7 @@ if (i==33){ nat="AA_ARRAY";}
 if (i==34){ nat="AA_LISTE";}
 if (i==35){ nat="AA_DEFINE";}
 if (i==36){ nat="AA_STRUCT";}
+if (i==37){ nat="AA_CALL";}
 
 
 
@@ -191,7 +193,13 @@ void affichage( arbre a, int niveau ){
 char *nat=rech_nature(a->nature);
 
 //affichage avec numlex et numdeclaration
-   printf ( "(%s)|%d|%d\n", nat,a->numlex,a->numdecl );
+	if (strcmp(nat,"AA_IDF")==0)
+{
+   printf ( "(%s)|%d|%d|{%s}\n", nat,a->numlex,a->numdecl,a->lexeme );
+}
+else {
+printf ( "(%s)|%d|%d\n", nat,a->numlex,a->numdecl );
+}
 
 	//printf ( "(%s)", nat);
 
@@ -205,7 +213,7 @@ char *nat=rech_nature(a->nature);
 
 int mainarbres()
 {
-
+/*
 arbre aa=creer_noeud(5,1,12);
 arbre afils=creer_noeud(3,12,10);
 arbre afrer=creer_noeud(101,40,16);
@@ -219,5 +227,5 @@ concat_pere_frer(afrer2,afrer3);
 
 
 affichage(aa,1);
-
+*/
 }
