@@ -85,7 +85,7 @@ void remplissage_tab_hash();
 
 void init_tab_lex();
 void affichage_tab_lex();
-void remplissage_tab_lex(char* ch,int n);
+int remplissage_tab_lex(char* ch);
 
 int existe_lex(char* ch);
 char* effaceespace(char* ch);
