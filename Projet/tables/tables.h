@@ -17,6 +17,9 @@ enum Nature{
   TYPE_PROC
 };
 
+    int indice = 0;
+int case1 = 0,case2 = 0;
+    #define TAILLE_MAXI 20
 typedef struct {/* structure de la table des déclarations */
   int index;
   char lexeme[LONGUEUR_LEXEME_MAX];
@@ -94,8 +97,8 @@ char* effaceespace(char* ch);
 /**** TABLE DES REPRESENTATION DES TYPES ET ENTETE DE SOUS PROGRAMME ****/
 
 #define TAILLE_TABLE_REPRESENTATION 100
-int table_representation[TAILLE_TABLE_REPRESENTATION];
-char table_representation_aux[TAILLE_TABLE_REPRESENTATION][100];
+//int table_representation[TAILLE_TABLE_REPRESENTATION];
+//char table_representation_aux[TAILLE_TABLE_REPRESENTATION][100];
 int compteur_table_representation_aux = 0;
 int compteur_table_representation = 0;
 int index_taille = 0;
@@ -109,7 +112,14 @@ int compteur_table_type = 0;
 int compteur_table_type_aux = 0;
 char sup[100];
 char inf[100];
-
+int table_representation[TAILLE_MAX] = {-1};	
+void afficher_table_representation();
+int inserer_table_representation(int valeur);
+void nbr_champs();
+int champs(int valeur);
+void type_tableau();
+int borne_tableau(int valeur);
+/*
 void inserer_table_representation_aux (char valeur[LONGUEUR_LEXEME_MAX]);
 void inserer_table_representation (char valeur[LONGUEUR_LEXEME_MAX]);
 void afficher_table_representation();
@@ -118,5 +128,6 @@ void inserer_table_taille();
 void inserer_table_type(char *type);
 void my_itoa(int value, char *arg);
 void inserer_table_declaration (int type, char lex[LONGUEUR_LEXEME_MAX]);
+*/
 
 #endif

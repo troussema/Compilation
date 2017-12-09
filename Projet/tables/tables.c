@@ -3,7 +3,7 @@
  * Module contenant les fonctions pour gerer la table des declarations          *
  *                                                                              *
  * Auteur: SOLOFO RABONARIJAONA                                                 *
- *                                                                              *
+ *         HABIB MOHAMED                                                                 *
  * Historique:                                                                  *
  *     - Creation le 03/11/17  par S.RABONARIJAONA                              *      - Modification le 05/11/17 par S.RABONARIJAONA
  *                                                                              *
@@ -301,8 +301,9 @@ return -1;
 
 
 
-/************** TABLE DE REPRESENTATION DES TYPES ET DES ENTETE DE SOUS PROGRAMMES ************************/
 
+/************** TABLE DE REPRESENTATION DES TYPES ET DES ENTETE DE SOUS PROGRAMMES ************************/
+/*
 void init_table_representation()
 {
   int i;
@@ -380,3 +381,99 @@ void my_itoa(int value, char *arg)
 {
   sprintf(arg,"%d", value);
 }
+
+*/
+
+/*table de representation*/
+
+int inserer_table_representation(int typ)
+{
+	table_representation[indice] = typ;
+	indice++;
+	/*return indice;*/	
+	return indice-1;
+}
+
+void type_tableau()
+{
+	case1 = inserer_table_representation(-1);
+
+}
+/* pour les borne du tableaux */
+int borne_tableau(int typ)
+{
+  table_representation[case1] = typ;
+  return case1;
+}
+
+/*
+int borne_tableau(int typ)
+{representation[case1] = typ;
+  return case1;
+}
+*/
+
+/*
+int champs(int typ)
+{
+ representation[case2] = valeur;
+  return case2;
+}
+*/
+
+//l'affichage
+void afficher_table_representation()
+{
+
+
+    int i;
+	printf("\ntable de representation des types\n\n");
+	for ( i = 0 
+		 ;(i < TAILLE_MAXI) && (table_representation[i]!=-1)
+		 ;i++)
+		{
+			printf("|");
+			
+			printf("%d \t",i);
+			printf("|");
+			/*les condition juste pour un affichage non decaler*/
+			
+			if(table_representation[i]<0)
+				printf(" %d     |\n",table_representation[i] );	
+			
+			else
+				printf(" %d      |\n",table_representation[i] );
+
+		}
+       printf("\n");
+
+}
+
+
+
+void nbr_champs()
+{
+	case2 = inserer_table_representation(-1);
+	/*case2 = inserer_table_representation(0);*/
+}
+/*
+void nbr_champs()
+{
+	case2 = inserer_table_representation(0);
+}
+*/
+/*
+void nbr_champs()
+{
+	case1 = inserer_table_representation(0);
+}
+*/
+
+int champs(int typ)
+{
+  table_representation[case2] = typ;
+  return case2;
+}
+
+
+

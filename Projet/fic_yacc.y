@@ -1,3 +1,8 @@
+%union {
+    struct arb *type1;
+    int val1;
+ }
+%type <val1> un_champ type_simple un_param nom_type IDF CSTCHAR CSTSTRING CSTINT CSTFLOAT
 %token PROG BEGIN2 END EMPTY PVIRG VIRG VAR TYPE STRUCT ENDSTRUCT ARRAY OF PROCEDURE FUNCTION RETURN WRITE READ FOR WHILE DO IF THEN ELSE ELSEIF 
 %token INT FLOAT CHAR STRING BOOL TRUE FALSE EQUAL NEQUAL LESS LESSEQ GREATER GREATEREQ OR AND 
 %token PLUS MINUS MULT DIV MOD POW 
@@ -6,13 +11,13 @@
 %token JMP SPACE
 %token IDF 
 %token DEFINE
-%union {
-    struct arb *type1;
-    int val1;
- }
+
+
 %{
 #include <stdio.h>
 #include "tables/tables.c"
+
+
 
 
 #define TAILLE_MAX 1000 
@@ -63,29 +68,55 @@ declaration          : declaration_type
 	             | declaration_procedure 
 	             | declaration_fonction 
 	             ;
-declaration_type     : TYPE variable DP STRUCT liste_champs ENDSTRUCT  
+declaration_type     : TYPE variable DP STRUCT {
+                      champs_structure = 0;
+                           nbr_champs();
+		     } liste_champs {
+                         champs(champs_structure);
+		       } ENDSTRUCT  
 
-| TYPE variable DP ARRAY  dimension  OF nom_type  PVIRG  
+		       | TYPE variable DP ARRAY {
+                              champs_tableau = 0;
+	                      type_tableau();
+                              nbr_champs();
+			 }  dimension {
+                                  champs(champs_tableau);
+			    }  OF nom_type {
+                                borne_tableau($9);
+		     }  PVIRG  
 dimension             : CO liste_dimensions CF
 		      ;
-liste_dimensions      : une_dimension
-		      | liste_dimensions VIRG une_dimension
+liste_dimensions      : une_dimension {champs_tableau++;}
+		      | liste_dimensions VIRG une_dimension {champs_tableau++;}
+ 		      ;
 		      ;
-une_dimension         : CSTINT PP CSTINT 
+une_dimension         : CSTINT PP CSTINT {
+                         
+                           inserer_table_representation($1);//CSTINT 
+                           inserer_table_representation($3);//CSTINT 
+                       } 
 		      ;
-liste_champs          : un_champ  PVIRG 
-                      | liste_champs un_champ PVIRG 
+liste_champs          : un_champ  PVIRG {champs_structure++;} 
+                      | liste_champs un_champ PVIRG {champs_structure++;} 
 		      ;
-un_champ              : variable DP nom_type
+un_champ              : IDF DP nom_type {
+                            
+                          inserer_table_representation($1);//variable
+                        inserer_table_representation($3);//nom_type
+//Machine virtuel                            
+inserer_table_representation(-2);//Machine virtuel
+                           
+                          }
 		      ;
 nom_type              : type_simple  
 		      | variable 
 		      ;
-type_simple           : INT   
-	              | FLOAT   
-	              | BOOL   
-		      | CHAR   
-		      | STRING CO CSTINT CF   
+/*les $$ comme l'exemple du td int 0 et float 1 ...*/
+type_simple           : INT {$$=0;}    
+	              | FLOAT {$$=1;}  
+	              | BOOL {$$=2;}   
+		      | CHAR {$$=3;}   
+		      | STRING CO CSTINT CF {$$=4;}   
 		      ;
 declaration_variable  : VAR variable DP nom_type   
                       | VAR variable DP nom_type AFF const 
@@ -99,8 +130,8 @@ liste_parametres      :
 		      | PO liste_param PF
 		      ;
 
-liste_param           : un_param 
-           	      | liste_param  VIRG un_param
+liste_param           : un_param {nombre_parametres++;}
+           	      | liste_param {nombre_parametres++;}   VIRG un_param 
 		      ;
 un_param              : variable DP type_simple 
 	 	      ;
@@ -150,7 +181,7 @@ affectation           : variable egal expression
 		      ;
 egal                  : AFF
                       ;
-variable              : IDF 
+variable              : IDF  
                       ;
 concatenation         : CSTSTRING PLUS expression
                       | CSTSTRING PLUS CSTSTRING
@@ -202,6 +233,8 @@ int main(void){
 	init_tab_hash();
 	
 	affichage_tab_lex();
+
+	afficher_table_representation();
 	
 
 
