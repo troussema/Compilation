@@ -2,7 +2,7 @@
     struct arb *type1;
     int val1;
  }
-%type <val1> un_champ type_simple un_param nom_type IDF CSTCHAR CSTSTRING CSTINT CSTFLOAT
+%type <val1> un_champ type_simple un_param nom_type variable IDF CSTCHAR CSTSTRING CSTINT CSTFLOAT
 %token PROG BEGIN2 END EMPTY PVIRG VIRG VAR TYPE STRUCT ENDSTRUCT ARRAY OF PROCEDURE FUNCTION RETURN WRITE READ FOR WHILE DO IF THEN ELSE ELSEIF 
 %token INT FLOAT CHAR STRING BOOL TRUE FALSE EQUAL NEQUAL LESS LESSEQ GREATER GREATEREQ OR AND 
 %token PLUS MINUS MULT DIV MOD POW 
@@ -120,10 +120,22 @@ type_simple           : INT {$$=0;}
 		      ;
 declaration_variable  : VAR variable DP nom_type   
                       | VAR variable DP nom_type AFF const 
+		      ; 
+declaration_procedure : PROCEDURE {
+                       nombre_parametres=0; /*initialiser le nbr de parametre*/
+                           nbr_champs();
+		      } variable liste_parametres {
+champs(nombre_parametres);
+              } corps 
 		      ;
-declaration_procedure : PROCEDURE variable liste_parametres corps 
-		      ;
-declaration_fonction  : FUNCTION variable liste_parametres RETURN type_simple
+declaration_fonction  : FUNCTION {
+                           nombre_parametres=0; /*initialiser le nbr de parametre*/
+                           nbr_champs();
+                           type_tableau();
+                       } variable liste_parametres RETURN type_simple {
+                           borne_tableau($6);
+                           champs(nombre_parametres);
+                       }
 corps 
 		      ;
 liste_parametres      : 
@@ -133,7 +145,10 @@ liste_parametres      :
 liste_param           : un_param {nombre_parametres++;}
            	      | liste_param {nombre_parametres++;}   VIRG un_param 
 		      ;
-un_param              : variable DP type_simple 
+un_param              : variable DP type_simple {
+	                    inserer_table_representation($1);//variable
+                        inserer_table_representation($3);//nom_type
+}
 	 	      ;
 instruction           : affectation PVIRG 
 	              | condition

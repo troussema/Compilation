@@ -19,7 +19,7 @@ enum Nature{
 
     int indice = 0;
 int case1 = 0,case2 = 0;
-    #define TAILLE_MAXI 20
+    #define TAILLE_MAXI 30
 typedef struct {/* structure de la table des déclarations */
   int index;
   char lexeme[LONGUEUR_LEXEME_MAX];
